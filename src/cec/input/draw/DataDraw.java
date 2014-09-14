@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import tools.ColorGenerator;
 
 /**
  *
@@ -26,11 +27,16 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 public class DataDraw extends JFrame {
 
     private final CECAtomic data;
-    private final Color[] colors = {Color.red, Color.green, Color.gray, Color.magenta, Color.blue, Color.pink};//ColorGenerator.randomColorArray(10);
+    private Color[] colors = {Color.red, Color.green, Color.gray,
+                                Color.magenta, Color.blue, Color.pink, 
+                                Color.cyan, Color.orange, Color.yellow};
 
     public DataDraw(CECAtomic data) {
         this.data = data;
-        
+
+        if (this.data.getNumberOfClusters() > colors.length) {
+            colors = ColorGenerator.randomColorArray(this.data.getNumberOfClusters());
+        }
         LookAndFeel.doIt();
     }
 
@@ -47,7 +53,6 @@ public class DataDraw extends JFrame {
 
         data.getCLusters().stream().forEach((c) -> {
             c.getData().stream().forEach((p) -> {
-                p.getMean();
                 dt[c.getId()].add(p.getMean().get(0, 0), p.getMean().get(1, 0));
             });
         });
