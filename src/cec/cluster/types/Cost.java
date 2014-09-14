@@ -29,6 +29,6 @@ public abstract class Cost {
 
     protected void setOptions(TypeOptions options) {
         if(options != null || !options.isEmpty())
-            throw new RuntimeException("Please configure your cluster king with the given options\n - write your implemtnation of this method in your class.");
+            throw new RuntimeException("Please configure your cluster kind with the given options\n - write your implemtnation of this method in your class.");
     }
 }

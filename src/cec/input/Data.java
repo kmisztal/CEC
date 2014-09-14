@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -81,14 +80,6 @@ public class Data {
         return data.iterator();
     }
 
-//    public short[] getPartition() {
-//        return partition;
-//    }
-
-//    public void setPartition(int x, short clustNumber) {
-//        data.get(x).setPartition(clustNumber);
-//    }
-
     public int getSize() {
         return data.size();
     }
@@ -104,4 +95,13 @@ public class Data {
     public Point get(int i) {
         return data.get(i);
     }
+
+    @Override
+    public String toString() {
+        if(data.isEmpty())
+            return "Empty dataset";
+        return "Data: size => " + getSize() + "; dimension => " + getDimension();
+    }
+    
+    
 }

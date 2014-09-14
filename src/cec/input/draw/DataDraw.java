@@ -3,6 +3,7 @@ package cec.input.draw;
 import cec.CECRunner;
 import cec.cluster.Cluster;
 import cec.cluster.Point;
+import cec.run.CECAtomic;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
@@ -24,10 +25,10 @@ import org.ejml.simple.SimpleMatrix;
  */
 public class DataDraw extends JFrame {
 
-    private final CECRunner data;
+    private final CECAtomic data;
     private final Color[] colors = {Color.red, Color.green, Color.gray, Color.magenta, Color.blue, Color.pink};//ColorGenerator.randomColorArray(10);
 
-    public DataDraw(CECRunner data) {
+    public DataDraw(CECAtomic data) {
         this.data = data;
     }
 
@@ -42,12 +43,12 @@ public class DataDraw extends JFrame {
             dt[i] = new DataTable(Double.class, Double.class);
         }
 
-        for (Cluster c : data.getCLusters()) {
+        data.getCLusters().stream().forEach((c) -> {
             c.getData().stream().forEach((p) -> {
                 p.getMean();
                 dt[c.getId()].add(p.getMean().get(0, 0), p.getMean().get(1, 0));
             });
-        }
+        });
 
         XYPlot plot = new XYPlot(dt);
 
@@ -63,7 +64,7 @@ public class DataDraw extends JFrame {
 
         int i = 0;
         for (Cluster c : data.getCLusters()) {
-            if (!data.getEmptyClusters()[i]) {
+            if (!c.isEmpty()) {
                 final SimpleMatrix m = c.getMean();
                 dt[k].add(m.get(0, 0), m.get(1, 0));
             }

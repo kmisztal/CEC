@@ -71,12 +71,12 @@ public class CECConfig extends Config {
         return getInt("general.cores");
     }
     
-    public int getGeneralRuns(){
-        return getInt("general.runs");
+    public int getNStart(){
+        return getInt("general.nstart");
     }
     
-    public int getGeneralEvents(){
-        return getInt("general.events");
+    public int getIterations(){
+        return getInt("general.iterations");
     }
     
     public String getGeneralDataType(){

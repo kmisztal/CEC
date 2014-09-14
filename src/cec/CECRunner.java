@@ -49,8 +49,8 @@ public class CECRunner {
         
         cec.run();
 
-        DataDraw dd = new DataDraw(cec);
-        dd.disp();
+//        DataDraw dd = new DataDraw(cec);
+//        dd.disp();
     }
 
     public void add(ClusterKind clusterKind) {

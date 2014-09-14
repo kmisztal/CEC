@@ -1,11 +1,12 @@
 package cec;
 
+import cec.run.CECExecutor;
 import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOption;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
 import cec.options.CECConfig;
-import cec.options.Options;
+import cec.run.CECAtomic;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -58,29 +59,23 @@ public class CEC {
         clusterTypes.add(new Pair<>(clusterKind, typeOption));
     }
 
-    public void run() throws IOException {
-        if(clusterTypes.isEmpty()){
-            System.err.println("READ FROM CONFIG FILE");
-        }
-        
-        if(data == null){
-            System.err.println("READ DATA INPUT FROM CONFIG FILE");
-        }
-        
-        
+    public void run() throws IOException {        
         ecec = CECExecutor.getInstance();
         op = CECConfig.getInstance(this.configFile);
         
+        //load data
         if(data == null){
             setData(op.getGeneralInputFilename(), op.getGeneralInputFileType());
         }
         ecec.setData(data);
+        
+        //load cluster types
         if(clusterTypes.isEmpty()){
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         ecec.setClusterTypes(clusterTypes);
         
-        
+        //run
         ecec.run(op);
     }
     
@@ -88,8 +83,12 @@ public class CEC {
         this.configFile = filename;
     }
 
+    public CECAtomic getResult(){
+        return ecec.getBestResult();
+    }
+    
     public void showResults() {
-        ecec.showResults();
+        getResult().showResults();
     }
 
     public void saveResults() {
