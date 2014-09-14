@@ -79,14 +79,6 @@ public class CECConfig extends Config {
         return getInt("general.iterations");
     }
     
-    public String getGeneralDataType(){
-        return getString("general.data.type");
-    }
-    
-    public int getGeneralDataDimension(){
-        return getInt("general.data.dimension");
-    }
-    
     public String getGeneralOutputDirectory(){
         return getString("general.output.directory");
     }

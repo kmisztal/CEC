@@ -1,15 +1,16 @@
 package cec.input.draw;
 
-import cec.CECRunner;
 import cec.cluster.Cluster;
-import cec.cluster.Point;
 import cec.run.CECAtomic;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.lines.LineRenderer;
+import de.erichseifert.gral.plots.lines.SmoothLineRenderer2D;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -17,7 +18,6 @@ import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
-import org.ejml.simple.SimpleMatrix;
 
 /**
  *
@@ -30,6 +30,8 @@ public class DataDraw extends JFrame {
 
     public DataDraw(CECAtomic data) {
         this.data = data;
+        
+        LookAndFeel.doIt();
     }
 
     public void disp() {
@@ -38,8 +40,8 @@ public class DataDraw extends JFrame {
         }
         final int k = data.getNumberOfClusters();
 
-        DataTable[] dt = new DataTable[k + 1];//new DataTable(Double.class)
-        for (int i = 0; i < k + 1; ++i) {
+        DataTable[] dt = new DataTable[k + 1 + data.getNumberOfClusters()];//new DataTable(Double.class)
+        for (int i = 0; i < dt.length; ++i) {
             dt[i] = new DataTable(Double.class, Double.class);
         }
 
@@ -52,7 +54,8 @@ public class DataDraw extends JFrame {
 
         XYPlot plot = new XYPlot(dt);
 
-        for (int i = 0; i < k; ++i) {
+        int i = 0;
+        for (; i < k; ++i) {
             DataSource s = plot.get(i);
 
             // Style data series
@@ -62,13 +65,23 @@ public class DataDraw extends JFrame {
             plot.setPointRenderer(s, points1);
         }
 
-        int i = 0;
+        LineRenderer line2 = new SmoothLineRenderer2D();
+        line2.setColor(GraphicsUtils.deriveWithAlpha(Color.black, 180));
+        line2.setStroke(new BasicStroke(6));
+        plot.setLineRenderer(dt[k + 1], line2);
+
+        data.getCLusters().stream().filter((c) -> (!c.isEmpty())).map((c) -> c.getMean()).forEach((m) -> {
+            dt[k].add(m.get(0, 0), m.get(1, 0));
+        });
+
         for (Cluster c : data.getCLusters()) {
-            if (!c.isEmpty()) {
-                final SimpleMatrix m = c.getMean();
-                dt[k].add(m.get(0, 0), m.get(1, 0));
-            }
             ++i;
+            if (c.isEmpty()) {
+                continue;
+            }
+            Ellipse e = new Ellipse(c);
+            e.addData(dt[i]);
+            plot.setLineRenderer(dt[i], line2);
         }
 
         DataSource s = plot.get(k);
@@ -79,22 +92,6 @@ public class DataDraw extends JFrame {
         points1.setColor(Color.BLACK);
         plot.setPointRenderer(s, points1);
 
-        // Create data
-//        DataTable dataTable = new DataTable(Double.class, Double.class, Double.class);
-//
-//        final int POINT_COUNT = 1000;
-//        java.util.Random rand = new java.util.Random();
-//        for (int i = 0; i < POINT_COUNT; i++) {
-//            double x = rand.nextGaussian();
-//            double y1 = rand.nextGaussian() + x;
-//            double y2 = rand.nextGaussian() - x;
-//            dataTable.add(x, y1, y2);
-//        }
-//
-//        // Create series
-//        DataSeries series1 = new DataSeries("Series 1", dataTable, 0, 1);
-//        DataSeries series2 = new DataSeries("Series 2", dataTable, 0, 2);
-//        XYPlot plot = new XYPlot(dataTable);//;series1, series2);
         // Style the plot
         double insetsTop = 20.0,
                 insetsLeft = 60.0,
@@ -108,16 +105,6 @@ public class DataDraw extends JFrame {
         plot.getPlotArea().setBorderColor(new Color(0.0f, 0.3f, 1.0f));
         plot.getPlotArea().setBorderStroke(new BasicStroke(2f));
 
-        // Style data series
-//        PointRenderer points1 = new DefaultPointRenderer2D();
-//        points1.setShape(new Ellipse2D.Double(-3.0, -3.0, 6.0, 6.0));
-//        points1.setColor(new Color(0.0f, 0.3f, 1.0f, 0.3f));
-//        plot.setPointRenderer(series1, points1);
-//
-//        PointRenderer points2 = new DefaultPointRenderer2D();
-//        points2.setShape(new Rectangle2D.Double(-2.5, -2.5, 5, 5));
-//        points2.setColor(new Color(0.0f, 0.0f, 0.0f, 0.3f));
-//        plot.setPointRenderer(series2, points2);
         // Style axes
         plot.getAxisRenderer(XYPlot.AXIS_X).setLabel("X");
         plot.getAxisRenderer(XYPlot.AXIS_Y).setLabel("Y");
@@ -134,9 +121,4 @@ public class DataDraw extends JFrame {
         this.setVisible(true);
     }
 
-//    public static void main(String[] args) {
-//        DataDraw df = new DataDraw();
-//        df.setVisible(true);
-//    
-//    }
 }
