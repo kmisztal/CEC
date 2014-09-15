@@ -93,7 +93,7 @@ public class DataDraw extends JFrame {
 
         // Style data series
         PointRenderer points1 = new DefaultPointRenderer2D();
-        points1.setShape(new Ellipse2D.Double(-20.0, -20.0, 20.0, 20.0));
+        points1.setShape(new Ellipse2D.Double(-10.0, -10.0, 20.0, 20.0));
         points1.setColor(Color.BLACK);
         plot.setPointRenderer(s, points1);
 

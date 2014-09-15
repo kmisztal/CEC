@@ -1,6 +1,7 @@
 package cec.cluster.types;
 
-import cec.cluster.types.gaussian.Gaussian;
+import cec.cluster.types.gaussian.Gaussians;
+import cec.cluster.types.gaussian.SphericalGaussians;
 
 /**
  *
@@ -8,10 +9,10 @@ import cec.cluster.types.gaussian.Gaussian;
  */
 public enum ClusterKind {
 
-    Gaussian("Gaussian", false);
+    Gaussians("Gaussians", false),
 //    GaussianCov("GaussianCov"),
 //    GaussianR("GaussianR"),
-//    GaussianRScale("GaussianRScale"),
+    SphericalGaussians("SphericalGaussians", false);
 //    GaussianDet("GaussianDet"),
 //    GaussianDiag("GaussianDiag"),
 //    GaussianLambda("GaussianLambda");
@@ -41,14 +42,14 @@ public enum ClusterKind {
 
     public Cost getFunction() {
         switch (this) {
-            case Gaussian:
-                return new Gaussian();
+            case Gaussians:
+                return new Gaussians();
 //            case GaussianCov:
 //                return new GaussianCov();
 //            case GaussianR:
 //                return new GaussianR();
-//            case GaussianRScale:
-//                return new GaussianRScale();
+            case SphericalGaussians:
+                return new SphericalGaussians();
 //            case GaussianDet:
 //                return new GaussianDet();
 //            case GaussianDiag:

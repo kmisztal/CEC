@@ -6,7 +6,7 @@ import cec.cluster.types.Cost;
  *
  * @author Krzysztof
  */
-public class Gaussian extends Cost {
+public class SphericalGaussiansWithFixedRadius extends Cost {
 
     @Override
     public double h() {
@@ -20,7 +20,7 @@ public class Gaussian extends Cost {
 
     @Override
     public String getInfo() {
-        return "All Gaussian distributions";
+        return "Gaussian: All Gaussian distributions";
     }
 
 }

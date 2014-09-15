@@ -23,11 +23,13 @@ public class Test {
         cec.setData("data/mouse_fix_r_1/input.txt",
                 "text/space-separated-values");
 
-        cec.add(ClusterKind.Gaussian, 3);
-        cec.add(ClusterKind.Gaussian, 3,
-                TypeOption.add("lambda1", 2.3),
-                TypeOption.add("lambda2", 3.4)
-        );
+        cec.add(ClusterKind.Gaussians, 6);
+        
+        cec.add(ClusterKind.SphericalGaussians, 6);
+//        cec.add(ClusterKind.Gaussian, 3,
+//                TypeOption.add("lambda1", 2.3),
+//                TypeOption.add("lambda2", 3.4)
+//        );
 
         cec.run();
 
