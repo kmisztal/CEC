@@ -27,7 +27,7 @@ public class CovarianceGaussians extends Cost {
 
     @Override
     public String getInfo() {
-        return "Gaussians with sepcified eigenvalues of covariance matrix";
+        return "Gaussians with sepcified covariance matrix";
     }
 
     @Override
