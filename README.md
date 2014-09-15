@@ -39,10 +39,14 @@ cec.showResults();
 
 //save results to file
 cec.saveResults();
-mkdir -
+
+new DataDraw(cec.getResult()).disp(); 
 ```
 For more example see the package ```cec.test``` 
 Addtional configuration is dune by the file ```cecconfig.properties```
+
+Simple Example
+--------------
 
 
 Version
