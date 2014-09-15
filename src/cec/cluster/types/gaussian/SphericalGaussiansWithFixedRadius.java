@@ -1,6 +1,8 @@
 package cec.cluster.types.gaussian;
 
 import cec.cluster.types.Cost;
+import cec.cluster.types.TypeOptions;
+import org.ejml.simple.SimpleMatrix;
 
 /**
  *
@@ -8,19 +10,33 @@ import cec.cluster.types.Cost;
  */
 public class SphericalGaussiansWithFixedRadius extends Cost {
 
+    private final String PARAM = "r";
+    private double r;
+
     @Override
     public double h() {
-        return cluster.getWeight() 
-                * (
-                    - Math.log(cluster.getWeight())
-                    + cluster.getDimension() * 0.5 * Math.log(2. * Math.PI * Math.E)
-                    + 0.5 * Math.log(cluster.getCov().determinant() * (cluster.getCardinality() - 1.) / cluster.getCardinality())
-                );
+        return cluster.getWeight()
+                * (-Math.log(cluster.getWeight())
+                + cluster.getDimension() * 0.5 * Math.log(2 * Math.PI)
+                + 0.5 * cluster.getCov().trace() / r
+                + 0.5 * Math.log(r));
     }
 
     @Override
     public String getInfo() {
-        return "Gaussian: All Gaussian distributions";
+        return "Spherical Gaussians with a fixed radius: radial Gaussian densities";
+    }
+
+    @Override
+    public Cost setOptions(TypeOptions options) {
+        checkCongiguration(options);
+        r = (Double) options.get(PARAM);
+        return this;
+    }
+    
+    @Override
+    public SimpleMatrix getCov() {
+        return SimpleMatrix.identity(this.cluster.getCov().numCols()).scale(r);
     }
 
 }

@@ -111,6 +111,10 @@ public class Cluster implements ClusterLike {
         this.mean = mean;
     }
 
+    public Cost getCostFunction() {
+        return costFunction;
+    }
+
     /**
      *
      * @return

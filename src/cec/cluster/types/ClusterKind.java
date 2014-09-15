@@ -1,7 +1,12 @@
 package cec.cluster.types;
 
+import cec.cluster.types.gaussian.CovarianceGaussians;
+import cec.cluster.types.gaussian.DeterminantGaussians;
+import cec.cluster.types.gaussian.DiagonalGaussians;
 import cec.cluster.types.gaussian.Gaussians;
+import cec.cluster.types.gaussian.LambdaGaussians;
 import cec.cluster.types.gaussian.SphericalGaussians;
+import cec.cluster.types.gaussian.SphericalGaussiansWithFixedRadius;
 
 /**
  *
@@ -10,12 +15,12 @@ import cec.cluster.types.gaussian.SphericalGaussians;
 public enum ClusterKind {
 
     Gaussians("Gaussians", false),
-//    GaussianCov("GaussianCov"),
-//    GaussianR("GaussianR"),
-    SphericalGaussians("SphericalGaussians", false);
-//    GaussianDet("GaussianDet"),
-//    GaussianDiag("GaussianDiag"),
-//    GaussianLambda("GaussianLambda");
+    CovarianceGaussians("CovarianceGaussians", true),
+    SphericalGaussiansWithFixedRadius("SphericalGaussiansWithFixedRadius", true),
+    SphericalGaussians("SphericalGaussians", false),
+    DeterminantGaussians("DeterminantGaussians", true),
+    DiagonalGaussians("DiagonalGaussians", false),
+    LambdaGaussians("LambdaGaussians", true);
     
     /**
      * name of cluster type
@@ -44,18 +49,18 @@ public enum ClusterKind {
         switch (this) {
             case Gaussians:
                 return new Gaussians();
-//            case GaussianCov:
-//                return new GaussianCov();
-//            case GaussianR:
-//                return new GaussianR();
+            case CovarianceGaussians:
+                return new CovarianceGaussians();
+            case SphericalGaussiansWithFixedRadius:
+                return new SphericalGaussiansWithFixedRadius();
             case SphericalGaussians:
                 return new SphericalGaussians();
-//            case GaussianDet:
-//                return new GaussianDet();
-//            case GaussianDiag:
-//                return new GaussianDiag();
-//            case GaussianLambda:
-//                return new GaussianLambda();
+            case DeterminantGaussians:
+                return new DeterminantGaussians();
+            case DiagonalGaussians:
+                return new DiagonalGaussians();
+            case LambdaGaussians:
+                return new LambdaGaussians();
             default:
                 throw new RuntimeException("Bad cluster kind");
         }

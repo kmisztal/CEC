@@ -50,7 +50,10 @@ public class CECAtomic {
 
     private void fillClusters() {
         clusterTypes.stream().forEach((Pair<ClusterKind, TypeOptions> p) -> {
-            clusters.add(new Cluster(p.getKey().getFunction(), data.getDimension()));
+            if(p.getKey().isOptionNeeded())
+                clusters.add(new Cluster(p.getKey().getFunction().setOptions(p.getValue()), data.getDimension()));
+            else
+                clusters.add(new Cluster(p.getKey().getFunction(), data.getDimension()));
         });
     }
 
@@ -190,7 +193,7 @@ public class CECAtomic {
             System.out.println("mean");
             System.out.println(c.getMean());
             System.out.println("cov");
-            System.out.println(c.getCov());
+            System.out.println(c.getCostFunction().getCov());
         }
     }
 }

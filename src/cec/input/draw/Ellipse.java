@@ -14,7 +14,7 @@ public class Ellipse {
     public double x0, y0, a, b, theta;
 
     public Ellipse(Cluster c) {
-        final SimpleMatrix cov = c.getCov();
+        final SimpleMatrix cov = c.getCostFunction().getCov();
         double[][] v = eig(cov, true);
         a = 2. * Math.sqrt(v[1][0]);
         b = 2. * Math.sqrt(v[0][0]);

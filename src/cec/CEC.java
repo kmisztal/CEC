@@ -53,10 +53,11 @@ public class CEC {
     }
     
     public void add(ClusterKind clusterKind, TypeOptions typeOption) {
-        if(clusterKind.isOptionNeeded())
+        if(clusterKind.isOptionNeeded() && typeOption.isEmpty())
             throw new RuntimeException("The " + clusterKind.name() + " needs additional configuration");
-        
-        clusterTypes.add(new Pair<>(clusterKind, typeOption));
+            
+        else
+            clusterTypes.add(new Pair<>(clusterKind, typeOption));
     }
 
     public void run() throws IOException {        

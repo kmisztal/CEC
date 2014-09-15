@@ -1,13 +1,14 @@
 package cec.cluster.types;
 
 import cec.cluster.Cluster;
+import org.ejml.simple.SimpleMatrix;
 
 /**
  *
  * @author Krzysztof
  */
 public abstract class Cost {
-
+    protected boolean needConfiguration = false;
     protected Cluster cluster;
 
     public Cost() {
@@ -27,8 +28,18 @@ public abstract class Cost {
 
     public abstract String getInfo();
 
-    protected void setOptions(TypeOptions options) {
-        if(options != null || !options.isEmpty())
+    public Cost setOptions(TypeOptions options) {        
+        return this;
+    }
+    
+    protected void checkCongiguration(TypeOptions options){
+        if(needConfiguration && (options == null || options.isEmpty()))
             throw new RuntimeException("Please configure your cluster kind with the given options\n - write your implemtnation of this method in your class.");
     }
+    
+    /**
+     * 
+     * @return covariance matrix for current cost model
+     */
+    public abstract SimpleMatrix getCov();
 }

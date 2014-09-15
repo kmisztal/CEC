@@ -1,6 +1,7 @@
 package cec.cluster.types.gaussian;
 
 import cec.cluster.types.Cost;
+import org.ejml.simple.SimpleMatrix;
 
 /**
  *
@@ -21,6 +22,11 @@ public class Gaussians extends Cost {
     @Override
     public String getInfo() {
         return "Gaussian: All Gaussian distributions";
+    }
+
+    @Override
+    public SimpleMatrix getCov() {
+        return cluster.getCov();
     }
 
 }
