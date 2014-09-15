@@ -1,7 +1,6 @@
 package cec.test;
 
 import cec.CEC;
-import cec.cluster.types.ClusterKind;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 

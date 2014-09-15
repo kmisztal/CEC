@@ -8,6 +8,7 @@ import cec.input.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.DoubleStream;
 import javafx.util.Pair;
 
 /**
@@ -21,9 +22,15 @@ public class CECAtomic {
     private final Data data;
     private final List<Pair<ClusterKind, TypeOptions>> clusterTypes;
     private final int iterations;
-
+    final int SIZE_MIN;
+    /**
+     * cost per iteration
+     */
     private final List<Double> costs;
     private final ArrayList<Cluster> clusters;
+    /**
+     * cost per cluster
+     */
     private final double[] cost;
     private final int numberOfClusters;
 
@@ -37,23 +44,27 @@ public class CECAtomic {
         this.cost = new double[numberOfClusters];
         this.clusters = new ArrayList<>();
 
+        this.SIZE_MIN = data.getSize() / 100;
+
         fillClusters();
     }
 
     public double getCost() {
-        double s = 0;
-        for (double d : cost) {
-            s += d;
-        }
-        return s;
+//        double s = 0;
+//        for (double d : cost) {
+//            s += d;
+//        }
+//        return s;
+        return DoubleStream.of(cost).sum();
     }
 
     private void fillClusters() {
         clusterTypes.stream().forEach((Pair<ClusterKind, TypeOptions> p) -> {
-            if(p.getKey().isOptionNeeded())
+            if (p.getKey().isOptionNeeded()) {
                 clusters.add(new Cluster(p.getKey().getFunction().setOptions(p.getValue()), data.getDimension()));
-            else
+            } else {
                 clusters.add(new Cluster(p.getKey().getFunction(), data.getDimension()));
+            }
         });
     }
 
@@ -73,6 +84,12 @@ public class CECAtomic {
         return clusters;
     }
 
+    /**
+     * initialize the CEC
+     * - set id for a clusters
+     * - randomly set points to cluster
+     * - calcualte initial cost
+     */
     private void init() {
 
         for (int i = 0; i < clusters.size(); ++i) {
@@ -89,18 +106,16 @@ public class CECAtomic {
     }
 
     private boolean iteration() {
-        double cost_ret = getCost();
-        final int SIZE_MIN = (int) (data.getData().size() * 0.01);
-//        clusters.stream().forEach((Yj) -> {
+        final double cost_ret = getCost();
+
         for (Cluster Yj : clusters) {
-//            Yj.getData().stream().forEach((p) -> {
             for (ClusterLike p : Yj.getData()) {
                 final double Yj_cost_sub = Yj.sub(p, false).getCost();
                 int best_cluster = Yj.getId();
                 double best_cost = Double.MIN_VALUE;
 
                 for (Cluster Yi : clusters) {
-                    if (Yi.getId() == Yj.getId() || Yi.isEmpty()) {
+                    if (Yi.isEmpty() || Yi.getId() == Yj.getId()) {
                         continue;
                     }
 
@@ -121,11 +136,9 @@ public class CECAtomic {
                 }
 
                 //delete cluster
-                if (Yj.getCardinality() > 0 && Yj.getCardinality() < SIZE_MIN) {
-
-//                    System.out.println("DELETE CLUSTER No: " + Yj.getId() + " TYPE: " + Yj.getType());
+                if (!Yj.isEmpty() && Yj.getCardinality() < SIZE_MIN) {
                     Yj.getData().stream().forEach((p_del) -> {
-                        clusters.get(getRandomCluster()).add(p_del);
+                        clusters.get(getRandomCluster(Yj.getId())).add(p_del);
                     });
 
                     Yj.clear();
@@ -134,20 +147,18 @@ public class CECAtomic {
                     for (int i = 0; i < numberOfClusters; ++i) {
                         cost[i] = clusters.get(i).getCost();
                     }
-
                     break;
                 }
-
             }
         }
         return cost_ret != getCost();
     }
 
-    private int getRandomCluster() {
+    private int getRandomCluster(int x) {
         int ret = 0;
         do {
             ret = rand.nextInt(numberOfClusters);
-        } while (clusters.get(ret).isEmpty());
+        } while (x == ret || clusters.get(ret).isEmpty());
         return ret;
     }
 
@@ -164,16 +175,27 @@ public class CECAtomic {
         }
     }
 
+    /**
+     * 
+     * @return initail number of clusters (it can differ from result clasuters needed for data description)
+     */
     public int getNumberOfClusters() {
         return numberOfClusters;
     }
 
+    /**
+     * 
+     * @return cluster needed for fully describe data
+     */
     private int getUsedNumberOfClusters() {
         int ret = 0;
         ret = clusters.stream().filter((c) -> (c.isEmpty())).map((_item) -> 1).reduce(ret, Integer::sum);
         return ret;
     }
 
+    /**
+     * prints the results on console
+     */
     public void showResults() {
         System.out.println("");
         System.out.println("BEST RUN INFO");

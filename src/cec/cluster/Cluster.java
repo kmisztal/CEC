@@ -221,9 +221,8 @@ public class Cluster implements ClusterLike {
         return -1;
     }
 
-    public double getCost() {
-        if(cardinality == 0) return 0;
-        return costFunction.h();
+    public double getCost() {        
+        return cardinality == 0 ? 0 : costFunction.h();
     }
 
     public List<ClusterLike> getData() {
