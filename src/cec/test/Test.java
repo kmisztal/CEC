@@ -23,25 +23,25 @@ public class Test {
         cec.setData("data/mouse_fix_r_1/input.txt",
                 "text/space-separated-values");
 
-        cec.add(ClusterKind.Gaussians, 3);
-
-        cec.add(ClusterKind.LambdaGaussians, 3,
-                TypeOption.add("lambda", new double[]{1., 0.1}));
-
-        cec.add(ClusterKind.CovarianceGaussians, 3,
-                TypeOption.add("covariance", new double[][]{{1., 0.1}, {0.1, 1}}));
-
-        cec.add(ClusterKind.DeterminantGaussians, 3,
-                TypeOption.add("det", 1.5)
-        );
+//        cec.add(ClusterKind.Gaussians, 3);
+//
+//        cec.add(ClusterKind.LambdaGaussians, 3,
+//                TypeOption.add("lambda", new double[]{1., 0.1}));
+//
+//        cec.add(ClusterKind.CovarianceGaussians, 3,
+//                TypeOption.add("covariance", new double[][]{{1., 0.1}, {0.1, 1}}));
+//
+//        cec.add(ClusterKind.DeterminantGaussians, 3,
+//                TypeOption.add("det", 1.5)
+//        );
+//        
+//        cec.add(ClusterKind.DiagonalGaussians, 3);
         
-        cec.add(ClusterKind.DiagonalGaussians, 3);
+        cec.add(ClusterKind.SphericalGaussians, 30);
         
-        cec.add(ClusterKind.SphericalGaussians, 3);
-        
-        cec.add(ClusterKind.SphericalGaussiansWithFixedRadius, 3,
-                TypeOption.add("r", 0.5)
-        );
+//        cec.add(ClusterKind.SphericalGaussiansWithFixedRadius, 3,
+//                TypeOption.add("r", 0.5)
+//        );
 
         cec.run();
 
