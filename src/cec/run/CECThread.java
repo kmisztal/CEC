@@ -53,7 +53,7 @@ public class CECThread implements CECInterface, Callable<CECAtomic> {
 
             if (best_result == null || best_result.getCost() > result.getCost()) {
                 best_result = result;
-                System.out.println(getId() + ": " + best_result.getCost());
+                System.out.println(getId() + ": " + best_result.getCost() + " ( " + Math.round((1. * i / nstart)*100) + "% )");
             }
         }
         return best_result;

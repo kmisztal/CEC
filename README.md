@@ -1,7 +1,21 @@
 CEC
 ===
 
+This project performs clustering analysis based on the cross-entropy clustering (CEC) algorithm, which was recently developed with the use of information theory. 
+The main advantages of CEC is that it automatically reduces unnecessary clusters while combining the speed and simplicity of k-means with the ability to 
+easily use various gaussian mixture models.
 
+In this work we provide a JAVA implementation of the \proglang{R} Package \pkg{CEC} which would be soon / which is avalible on CRAN.
+
+
+> **NOTE:** If you want to use our software in your reasearch please cite our articles:
+>
+> - Tabor, Jacek, and Przemysław Spurek.   
+>   "Cross-entropy clustering."  
+>   Pattern Recognition 47.9 (2014): 3046-3059.
+> - Tabor, Jacek, and Krzysztof Misztal.  
+>   "Detection of elliptical shapes via cross-entropy clustering."  
+>   Pattern Recognition and Image Analysis. Springer Berlin Heidelberg, 2013. 656-663.
 
 > Have fun :)
 
