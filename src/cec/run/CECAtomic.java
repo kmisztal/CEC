@@ -172,6 +172,8 @@ public class CECAtomic {
             if (!t) {
                 break;
             }
+            
+            //zmiana na dzielenie co ileś pętli
         }
     }
 
@@ -189,7 +191,7 @@ public class CECAtomic {
      */
     private int getUsedNumberOfClusters() {
         int ret = 0;
-        ret = clusters.stream().filter((c) -> (c.isEmpty())).map((_item) -> 1).reduce(ret, Integer::sum);
+        ret = clusters.stream().filter((c) -> (!c.isEmpty())).map((_item) -> 1).reduce(ret, Integer::sum);
         return ret;
     }
 
