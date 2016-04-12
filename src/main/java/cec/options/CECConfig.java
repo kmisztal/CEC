@@ -1,12 +1,13 @@
 package cec.options;
 
+import nl.chess.it.util.config.Config;
+import nl.chess.it.util.config.ConfigValidationResult;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Properties;
-import nl.chess.it.util.config.Config;
-import nl.chess.it.util.config.ConfigValidationResult;
 
 /**
  *

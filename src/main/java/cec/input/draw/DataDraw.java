@@ -1,23 +1,8 @@
 package cec.input.draw;
 
-import cec.cluster.Cluster;
 import cec.run.CECAtomic;
-import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.lines.LineRenderer;
-import de.erichseifert.gral.plots.lines.SmoothLineRenderer2D;
-import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
-import de.erichseifert.gral.plots.points.PointRenderer;
-import de.erichseifert.gral.ui.InteractivePanel;
-import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Insets2D;
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.geom.Ellipse2D;
 import javax.swing.JFrame;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import tools.ColorGenerator;
 
 /**
@@ -40,7 +25,7 @@ public class DataDraw extends JFrame {
         LookAndFeel.doIt();
     }
 
-    public void disp() {
+    public void disp() {/*
         if (data.getDimension() != 2) {
             throw new RuntimeException("You can see only 2D data");
         }
@@ -123,7 +108,7 @@ public class DataDraw extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setMinimumSize(getContentPane().getMinimumSize());
         this.setSize(550, 550);
-        this.setVisible(true);
+        this.setVisible(true);*/
     }
 
 }

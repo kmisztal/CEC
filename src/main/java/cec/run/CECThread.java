@@ -4,9 +4,10 @@ import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
 import cec.options.CECConfig;
+import javafx.util.Pair;
+
 import java.util.List;
 import java.util.concurrent.Callable;
-import javafx.util.Pair;
 
 /**
  *
