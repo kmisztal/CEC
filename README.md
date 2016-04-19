@@ -63,8 +63,7 @@ Addtional configuration is dune by the file ```cecconfig.properties```
 
 Simple Example
 --------------
-![alt tag](https://raw.github.com/kmisztal/CEC/master/img/mouse.png)
-
+![alt tag](https://raw.github.com/kmisztal/CEC/master/src/main/resources/img/mouse.png)
 
 TODO
 ----
