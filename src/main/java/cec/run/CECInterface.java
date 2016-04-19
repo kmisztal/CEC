@@ -3,8 +3,9 @@ package cec.run;
 import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
-import java.util.List;
 import javafx.util.Pair;
+
+import java.util.List;
 
 /**
  *

@@ -4,6 +4,8 @@ import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
 import cec.options.CECConfig;
+import javafx.util.Pair;
+
 import java.util.List;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
@@ -12,7 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.util.Pair;
 
 /**
  *

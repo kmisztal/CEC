@@ -5,11 +5,12 @@ import cec.cluster.ClusterLike;
 import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.DoubleStream;
-import javafx.util.Pair;
 
 /**
  *
