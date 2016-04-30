@@ -14,6 +14,9 @@ lib
 core
 nbproject
 
+#logs
+logs
+
 #general swap/backup files
 *.so
 *.log
