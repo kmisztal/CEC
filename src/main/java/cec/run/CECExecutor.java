@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Krzysztof
  */
 public class CECExecutor {
@@ -29,11 +28,13 @@ public class CECExecutor {
     private CECExecutor() {
     }
 
-    public static CECExecutor getInstance() {
+    public synchronized static CECExecutor getInstance() {
+
         if (CECExecutor.singleton == null) {
             CECExecutor.singleton = new CECExecutor();
         }
         return singleton;
+
     }
 
     public void setData(Data data) {
@@ -55,7 +56,7 @@ public class CECExecutor {
             cect.setData(data);
             cect.setClusterTypes(clusterTypes);
             cect.setOptions(op);
-            
+
             pool.submit(cect);
         }
 

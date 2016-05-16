@@ -11,6 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  *
  * @author Krzysztof
  */
+
 public class LookAndFeel {
 
     /**

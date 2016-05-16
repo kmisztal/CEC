@@ -30,7 +30,7 @@ public class Options {
     }
     
     public void addKey(String key){
-        dictionary.put(key, new HashMap<String,String>());
+        dictionary.put(key, new HashMap<>());
     }
     
     public void addValue(String key, String key1, String value){
@@ -41,12 +41,13 @@ public class Options {
 
     @Override
     public String toString() {
-        String ret = "";
+        StringBuilder ret = new StringBuilder("");
+
         for(Map.Entry<String, HashMap<String,String>> e : dictionary.entrySet())
         {
-            ret += e.getKey()+": "+e.getValue()+"\n";
+            ret.append(e.getKey()).append(": ").append(e.getValue()).append("\n");
         }
-        return ret;
+        return ret.toString();
     }
     
     

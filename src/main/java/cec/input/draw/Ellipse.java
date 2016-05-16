@@ -2,8 +2,9 @@ package cec.input.draw;
 
 import cec.cluster.Cluster;
 import de.erichseifert.gral.data.DataTable;
-import static java.lang.Math.sqrt;
 import org.ejml.simple.SimpleMatrix;
+
+import static java.lang.Math.sqrt;
 
 /**
  *
@@ -11,7 +12,11 @@ import org.ejml.simple.SimpleMatrix;
  */
 public class Ellipse {
 
-    public double x0, y0, a, b, theta;
+    public final double x0;
+    public final double y0;
+    public final double a;
+    public final double b;
+    public double theta;
 
     public Ellipse(Cluster c) {
         final SimpleMatrix cov = c.getCostFunction().getCov();

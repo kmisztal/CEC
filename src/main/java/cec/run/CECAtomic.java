@@ -79,9 +79,9 @@ public class CECAtomic {
 
     /**
      *
-     * @return list of cluters
+     * @return list of clusters
      */
-    public List<Cluster> getCLusters() {
+    public List<Cluster> getClusters() {
         return clusters;
     }
 
@@ -89,7 +89,7 @@ public class CECAtomic {
      * initialize the CEC
      * - set id for a clusters
      * - randomly set points to cluster
-     * - calcualte initial cost
+     * - calculate initial cost
      */
     private void init() {
 
@@ -97,9 +97,7 @@ public class CECAtomic {
             clusters.get(i).setId(i);
         }
 
-        data.getData().stream().forEach((p) -> {
-            clusters.get(rand.nextInt(numberOfClusters)).add(p);
-        });
+        data.getData().stream().forEach((p) -> clusters.get(rand.nextInt(numberOfClusters)).add(p));
 
         for (int i = 0; i < numberOfClusters; ++i) {
             cost[i] = clusters.get(i).getCost();
@@ -138,9 +136,7 @@ public class CECAtomic {
 
                 //delete cluster
                 if (!Yj.isEmpty() && Yj.getCardinality() < SIZE_MIN) {
-                    Yj.getData().stream().forEach((p_del) -> {
-                        clusters.get(getRandomCluster(Yj.getId())).add(p_del);
-                    });
+                    Yj.getData().stream().forEach((p_del) -> clusters.get(getRandomCluster(Yj.getId())).add(p_del));
 
                     Yj.clear();
 
@@ -156,7 +152,7 @@ public class CECAtomic {
     }
 
     private int getRandomCluster(int x) {
-        int ret = 0;
+        int ret;
         do {
             ret = rand.nextInt(numberOfClusters);
         } while (x == ret || clusters.get(ret).isEmpty());
@@ -180,7 +176,7 @@ public class CECAtomic {
 
     /**
      * 
-     * @return initail number of clusters (it can differ from result clasuters needed for data description)
+     * @return initial number of clusters (it can differ from result clusters needed for data description)
      */
     public int getNumberOfClusters() {
         return numberOfClusters;
@@ -202,7 +198,7 @@ public class CECAtomic {
     public void showResults() {
         System.out.println("");
         System.out.println("BEST RUN INFO");
-        System.out.println("Completted in " + costs.size() + " steps");
+        System.out.println("Completed in " + costs.size() + " steps");
         System.out.println("Cost in each step " + costs.toString());
         final int v = getUsedNumberOfClusters();
         System.out.println(v + " needed for clustering (while " + numberOfClusters + " suggested)");

@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Data {
 
     private List<Point> data;
-    private DataReader reader;
+    private final DataReader reader;
 
     public Data() {
         reader = new TextReader();

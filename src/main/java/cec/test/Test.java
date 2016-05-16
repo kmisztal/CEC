@@ -4,7 +4,7 @@ import cec.CEC;
 import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOption;
 import cec.input.draw.DataDraw;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 
 /**
@@ -17,7 +17,7 @@ public class Test {
      * @param args the command line arguments
      * @throws java.io.FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    public static void main(String[] args) throws IOException {
 
         CEC cec = new CEC();
         cec.setData("datat/mouse_fix_r_1/input.txt",

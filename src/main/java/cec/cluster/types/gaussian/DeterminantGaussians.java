@@ -10,7 +10,7 @@ import org.ejml.simple.SimpleMatrix;
  */
 public class DeterminantGaussians extends Cost {
 
-    private final String PARAM = "det";
+    private static final String PARAM = "det";
     private double det;
 
     @Override

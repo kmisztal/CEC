@@ -31,7 +31,7 @@ public enum ClusterKind {
      */
     private final boolean optionNeeded;
 
-    private ClusterKind(String name, boolean optionNeeded) {
+    ClusterKind(String name, boolean optionNeeded) {
         this.name = name;
         this.optionNeeded = optionNeeded;
     }

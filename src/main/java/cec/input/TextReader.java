@@ -1,11 +1,9 @@
 package cec.input;
 
 import cec.cluster.Point;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.util.ArrayList;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -15,8 +13,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class TextReader extends DataReader {
 
-    private final String type1 = "text/tab-separated-values";
-    private final String type2 = "text/space-separated-values";
+    private static final String type1 = "text/tab-separated-values";
+    private static final String type2 = "text/space-separated-values";
 
     public TextReader() {
 
@@ -29,7 +27,7 @@ public class TextReader extends DataReader {
 
     @Override
     public List<Point> read(String filename, String type) throws IOException {
-        String separator = "";
+        String separator;
         switch (type) {
             case type1:
                 separator = "\t";
@@ -45,16 +43,18 @@ public class TextReader extends DataReader {
                 }
         }
 
-        List<Point> data = new ArrayList<>();
+        List<Point> data;
 
         final double weight = 1. / countLines(filename);
 
-        FileReader fileReader = new FileReader(filename);
+
+        InputStreamReader fileReader = new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8);
+
 
         final int dim;
         try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             data = new CopyOnWriteArrayList<>();
-            String line = null;
+            String line;
             if ((line = bufferedReader.readLine()) != null) {
                 dim = getDimension(line, separator);
             } else {
@@ -76,8 +76,8 @@ public class TextReader extends DataReader {
     }
 
     private int countLines(String filename) throws IOException {
-        int cnt = 0;
-        try (LineNumberReader reader = new LineNumberReader(new FileReader(filename))) {
+        int cnt;
+        try (LineNumberReader reader = new LineNumberReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8))) {
             while (reader.readLine() != null) {
             }
             cnt = reader.getLineNumber();

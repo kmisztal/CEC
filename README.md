@@ -31,7 +31,7 @@ cec.add(ClusterKind.Gaussians, 3);
 //Gaussians with sepcified eigenvalues of covariance matrix
 cec.add(ClusterKind.LambdaGaussians, 3,
 		TypeOption.add("lambda", new double[]{1., 0.1}));
-//Gaussians with sepcified covariance matrix
+//Gaussians with specified covariance matrix
 cec.add(ClusterKind.CovarianceGaussians, 3,
 		TypeOption.add("covariance", new double[][]{{1., 0.1}, {0.1, 1}}));
 //Gaussians with a covaraince matrix with given determinant
@@ -59,7 +59,7 @@ cec.saveResults();
 new DataDraw(cec.getResult()).disp(); 
 ```
 For more example see the package ```cec.test``` 
-Addtional configuration is dune by the file ```cecconfig.properties```
+Additional configuration is dune by the file ```cecconfig.properties```
 
 Simple Example
 --------------
