@@ -1,0 +1,58 @@
+<!--
+                                            Default logging configuration for development.
+The logging information is written to:
+* CONSOLE: all logs with debug level
+* FILES
+    - logs/cec.yyyy-mm-dd.log: all logs with debug level
+    - logs/cec-error.yyyy-mm-dd.log all logs with error level
+
+Having logs in the files allow to preserve them during application restart. Distinction between standard and error files
+simplify application monitoring. Errors can be quickly determine without the need to grep standard log file.
+
+Note:
+    - For production purposes use logback-prod.xml.
+    - See LoggingUsage.java for more examples.
+-->
+
+<!--When debug is enabled internal logback status is printed, ex: errors during configuration file parsing -->
+<configuration debug="false">
+
+    <property name="LOGGING_DIR" value="logs"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date [%-5level] [%thread] %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGGING_DIR}/cec.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date %level [%thread] %logger %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGGING_DIR}/cec-error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date %level [%thread] %logger %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE_ERROR"/>
+    </root>
+</configuration>
