@@ -7,7 +7,6 @@ import org.ejml.simple.SimpleMatrix;
 import static java.lang.Math.sqrt;
 
 /**
- *
  * @author Krzysztof
  */
 public class Ellipse {
@@ -35,19 +34,20 @@ public class Ellipse {
 
     private double[][] eig(SimpleMatrix cov, boolean eigenvalues) {
         if (cov.numRows() == cov.numCols() && cov.numCols() == 2) {
-            final double a = cov.get(0, 0),
-                    b = cov.get(0, 1),
-                    c = cov.get(1, 0),
-                    d = cov.get(1, 1);
+            final double a = cov.get(0, 0);
+            final double b = cov.get(0, 1);
+            final double c = cov.get(1, 0);
+            final double d = cov.get(1, 1);
+            double sqrt = sqrt(a * a + 4 * b * c - 2 * a * d + d * d);
             if (eigenvalues) {
                 return new double[][]{
-                    {(a + d - sqrt(a * a + 4 * b * c - 2 * a * d + d * d)) / 2.},
-                    {(a + d + sqrt(a * a + 4 * b * c - 2 * a * d + d * d)) / 2.}
+                        {(a + d - sqrt) / 2.},
+                        {(a + d + sqrt) / 2.}
                 };
             } else {
                 return new double[][]{
-                    {-(-a + d + sqrt(a * a + 4 * b * c - 2 * a * d + d * d)) / (2. * c), 1},
-                    {-(-a + d - sqrt(a * a + 4 * b * c - 2 * a * d + d * d)) / (2. * c), 1}
+                        {-(-a + d + sqrt) / (2. * c), 1},
+                        {-(-a + d - sqrt) / (2. * c), 1}
                 };
             }
         } else {
@@ -56,9 +56,9 @@ public class Ellipse {
     }
 
     public void addData(DataTable d) {
-        final double step = Math.PI/180.;
-        for(double i = 0; i < 2*Math.PI; i+=step){
-            d.add(x0 + a * Math.cos(i) * Math.cos(theta) - b * Math.sin(i) * Math.sin(theta),
+        final double step = Math.PI / 180.;
+        for (double i = 0; i < 2 * Math.PI; i += step) {
+            d.add(x0 + a * Math.cos(i) * Math.cos(theta) -  b *  Math.sin(i) * Math.sin(theta),
                     y0 + a * Math.cos(i) * Math.sin(theta) + b * Math.sin(i) * Math.cos(theta));
         }
     }

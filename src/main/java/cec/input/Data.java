@@ -20,7 +20,7 @@ public class Data {
         reader = new TextReader();
         reader.setSuccessor(new ImageReader());
     }
-    
+
     public void read(String filename, String type){
         try {
             data = reader.read(filename, type);
@@ -60,6 +60,6 @@ public class Data {
             return "Empty dataset";
         return "Data: size => " + getSize() + "; dimension => " + getDimension();
     }
-    
-    
+
+
 }

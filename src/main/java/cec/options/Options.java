@@ -26,7 +26,7 @@ public class Options {
     private final HashMap<String, HashMap<String,String>> dictionary;
 
     private Options() {
-        dictionary = new HashMap();
+        dictionary = new HashMap<>();
     }
     
     public void addKey(String key){

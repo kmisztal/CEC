@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class CECExecutor {
 
-    private static CECExecutor singleton;
+    private static final CECExecutor singleton = new CECExecutor();
     private Data data;
     private List<Pair<ClusterKind, TypeOptions>> clusterTypes;
     private CECAtomic best_result;
@@ -28,13 +28,8 @@ public class CECExecutor {
     private CECExecutor() {
     }
 
-    public synchronized static CECExecutor getInstance() {
-
-        if (CECExecutor.singleton == null) {
-            CECExecutor.singleton = new CECExecutor();
-        }
+    public static CECExecutor getInstance() {
         return singleton;
-
     }
 
     public void setData(Data data) {
