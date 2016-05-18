@@ -11,6 +11,7 @@
     <name>CEC</name>
 
     <properties>
+        <logback.version>1.1.7</logback.version>
     </properties>
 
     <build>
@@ -26,6 +27,14 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources/configuration</directory>
+            </resource>
+        </resources>
     </build>
 
     <dependencies>
@@ -43,6 +52,18 @@
             <groupId>javaconfig</groupId>
             <artifactId>javaconfig</artifactId>
             <version>1.4</version>
+        </dependency>
+
+        <!--Logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
     </dependencies>
 
