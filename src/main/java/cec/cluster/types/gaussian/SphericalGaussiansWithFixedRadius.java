@@ -10,7 +10,7 @@ import org.ejml.simple.SimpleMatrix;
  */
 public class SphericalGaussiansWithFixedRadius extends Cost {
 
-    private final String PARAM = "r";
+    private static final String PARAM = "r";
     private double r;
 
     @Override

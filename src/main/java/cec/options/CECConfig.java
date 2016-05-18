@@ -6,7 +6,6 @@ import nl.chess.it.util.config.ConfigValidationResult;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Properties;
 
 /**
@@ -28,7 +27,7 @@ public class CECConfig extends Config {
      * @param resourceName
      * @throws java.io.IOException
      */
-    private CECConfig(String resourceName) {
+    private CECConfig(String resourceName) throws IOException{
         super(read(resourceName));
         
         ConfigValidationResult configResult = this.validateConfiguration();
@@ -36,8 +35,8 @@ public class CECConfig extends Config {
         if (configResult.thereAreErrors()) {
             System.out.println("Errors in configuration");
 
-            for (Iterator iter = configResult.getErrors().iterator(); iter.hasNext();) {
-                System.out.println(" > " + iter.next());
+            for (Object o : configResult.getErrors()) {
+                System.out.println(" > " + o);
             }
 
             System.exit(1);
@@ -96,9 +95,9 @@ public class CECConfig extends Config {
         return getString("general.input.type");
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         CECConfig op = getInstance(null);
-        System.out.println(op.densities);
+        System.out.println(densities);
     }
     
     private static void load(){
@@ -107,20 +106,20 @@ public class CECConfig extends Config {
         if (configResult.thereAreUnusedProperties()) {
 //            System.out.println("Unused properties");
             densities = Options.getInstance();
-            for (Iterator iter = configResult.getUnusedProperties().iterator(); iter.hasNext();) {
-                final String name = (String) iter.next();                
+            for (Object o : configResult.getUnusedProperties()) {
+                final String name = (String) o;
 //                System.out.println(" > " + name + " " + config.getString(name));
                 final int beg = name.indexOf(".", 0);
-                final int end = name.indexOf(".", beg+1);
-                final String type = name.substring(beg+1, end);
-                densities.addValue(type, name.substring(end+1), singleton.getString(name));
+                final int end = name.indexOf(".", beg + 1);
+                final String type = name.substring(beg + 1, end);
+                densities.addValue(type, name.substring(end + 1), singleton.getString(name));
             }
         }else{
             System.out.println("Please complete properties file");           
         }
     }    
 
-    public static CECConfig getInstance(String file) {
+    public static CECConfig getInstance(String file) throws IOException {
         if(singleton == null){
             CECConfig.singleton = new CECConfig(file == null ? RESOURCE_NAME : file);
             load();

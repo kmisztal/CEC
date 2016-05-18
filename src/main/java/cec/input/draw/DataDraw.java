@@ -1,9 +1,10 @@
 package cec.input.draw;
 
 import cec.run.CECAtomic;
-import java.awt.Color;
-import javax.swing.JFrame;
 import tools.ColorGenerator;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -11,16 +12,13 @@ import tools.ColorGenerator;
  */
 public class DataDraw extends JFrame {
 
-    private final CECAtomic data;
-    private Color[] colors = {Color.red, Color.green, Color.gray,
-                                Color.magenta, Color.blue, Color.pink, 
-                                Color.cyan, Color.orange, Color.yellow};
-
     public DataDraw(CECAtomic data) {
-        this.data = data;
 
-        if (this.data.getNumberOfClusters() > colors.length) {
-            colors = ColorGenerator.randomColorArray(this.data.getNumberOfClusters());
+        Color[] colors = {Color.red, Color.green, Color.gray,
+                Color.magenta, Color.blue, Color.pink,
+                Color.cyan, Color.orange, Color.yellow};
+        if (data.getNumberOfClusters() > colors.length) {
+            colors = ColorGenerator.randomColorArray(data.getNumberOfClusters());
         }
         LookAndFeel.doIt();
     }
@@ -36,7 +34,7 @@ public class DataDraw extends JFrame {
             dt[i] = new DataTable(Double.class, Double.class);
         }
 
-        data.getCLusters().stream().forEach((c) -> {
+        data.getClusters().stream().forEach((c) -> {
             c.getData().stream().forEach((p) -> {
                 dt[c.getId()].add(p.getMean().get(0, 0), p.getMean().get(1, 0));
             });
@@ -60,11 +58,11 @@ public class DataDraw extends JFrame {
         line2.setStroke(new BasicStroke(6));
         plot.setLineRenderer(dt[k + 1], line2);
 
-        data.getCLusters().stream().filter((c) -> (!c.isEmpty())).map((c) -> c.getMean()).forEach((m) -> {
+        data.getClusters().stream().filter((c) -> (!c.isEmpty())).map((c) -> c.getMean()).forEach((m) -> {
             dt[k].add(m.get(0, 0), m.get(1, 0));
         });
 
-        for (Cluster c : data.getCLusters()) {
+        for (Cluster c : data.getClusters()) {
             ++i;
             if (c.isEmpty()) {
                 continue;

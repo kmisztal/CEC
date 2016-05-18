@@ -8,12 +8,12 @@ import org.ejml.simple.SimpleMatrix;
  */
 public interface ClusterLike {
 
-    public double getWeight();
+    double getWeight();
 
-    public SimpleMatrix getMean();
+    SimpleMatrix getMean();
 
-    public SimpleMatrix getCov();
+    SimpleMatrix getCov();
 
-    public int getCardinality();
+    int getCardinality();
     
 }

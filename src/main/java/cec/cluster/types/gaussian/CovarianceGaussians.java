@@ -10,7 +10,7 @@ import org.ejml.simple.SimpleMatrix;
  */
 public class CovarianceGaussians extends Cost {
 
-    private final String PARAM = "covariance";
+    private static final String PARAM = "covariance";
     private SimpleMatrix sigma;
     private SimpleMatrix sigma_inv;
     private double sigma_det;
@@ -27,7 +27,7 @@ public class CovarianceGaussians extends Cost {
 
     @Override
     public String getInfo() {
-        return "Gaussians with sepcified covariance matrix";
+        return "Gaussians with specified covariance matrix";
     }
 
     @Override

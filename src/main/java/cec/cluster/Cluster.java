@@ -1,12 +1,12 @@
 package cec.cluster;
 
 import cec.cluster.types.Cost;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.ejml.simple.SimpleMatrix;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
- *
  * @author Krzysztof
  */
 public class Cluster implements ClusterLike {
@@ -115,10 +115,6 @@ public class Cluster implements ClusterLike {
         return costFunction;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public double getWeight() {
         return weight;
@@ -221,7 +217,7 @@ public class Cluster implements ClusterLike {
         return -1;
     }
 
-    public double getCost() {        
+    public double getCost() {
         return cardinality == 0 ? 0 : costFunction.h();
     }
 

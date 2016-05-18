@@ -12,7 +12,7 @@ import java.util.List;
  * @author Krzysztof
  */
 public interface CECInterface {
-    public void setData(Data data);
+    void setData(Data data);
 
-    public void setClusterTypes(List<Pair<ClusterKind,TypeOptions>> clusterTypes);
+    void setClusterTypes(List<Pair<ClusterKind, TypeOptions>> clusterTypes);
 }

@@ -3,7 +3,6 @@ package cec.cluster;
 import org.ejml.simple.SimpleMatrix;
 
 /**
- *
  * @author Krzysztof
  */
 public class Point implements ClusterLike, Comparable<Point> {
@@ -20,11 +19,13 @@ public class Point implements ClusterLike, Comparable<Point> {
         final int dim = x.length;
         this.weight = weight;
         this.x = new SimpleMatrix(dim, 1, true, x);
-        if (cov == null) {
-            Point.cov = new SimpleMatrix(dim, dim);
+        synchronized (Point.class) {
+            if (cov == null) {
+                Point.cov = new SimpleMatrix(dim, dim);
 
-            for (int i = 0; i < dim; ++i) {
-                Point.cov.set(i, i, Math.pow(delta, dim + 2.) * 1.0 / 12.0 * epsilon);//TODO jak to wyglada w wyzszych wymiarach
+                for (int i = 0; i < dim; ++i) {
+                    Point.cov.set(i, i, Math.pow(delta, dim + 2.) * 1.0 / 12.0 * epsilon);//TODO jak to wyglada w wyzszych wymiarach
+                }
             }
         }
     }
@@ -32,11 +33,13 @@ public class Point implements ClusterLike, Comparable<Point> {
     public Point(double weight, int dimension) {
         this.x = new SimpleMatrix(dimension, 1);
         this.weight = weight;
-        if (cov == null) {
-            Point.cov = new SimpleMatrix(dimension, dimension);
+        synchronized (Point.class) {
+            if (cov == null) {
+                Point.cov = new SimpleMatrix(dimension, dimension);
 
-            for (int i = 0; i < dimension; ++i) {
-                Point.cov.set(i, i, Math.pow(delta, dimension + 2.) * 1.0 / 12.0 * epsilon);//TODO jak to wyglada w wyzszych wymiarach
+                for (int i = 0; i < dimension; ++i) {
+                    Point.cov.set(i, i, Math.pow(delta, dimension + 2.) * 1.0 / 12.0 * epsilon);//TODO jak to wyglada w wyzszych wymiarach
+                }
             }
         }
     }
@@ -83,6 +86,15 @@ public class Point implements ClusterLike, Comparable<Point> {
         return 0;
     }
 
+    public boolean equals(Object t) {
+        return t instanceof Point && compareTo((Point) t) == 0;
+    }
+
+    public int hashCode() {
+        assert false;
+        return 42;
+    }
+
     public int getDimension() {
         return x.numRows();
     }
@@ -101,11 +113,12 @@ public class Point implements ClusterLike, Comparable<Point> {
 
     @Override
     public String toString() {
-        String ret = "";
-        for(int i = 0; i < x.numRows(); ++i)
-            ret += x.get(i, 0) + " ";
-        return ret;
+        StringBuilder ret = new StringBuilder("");
+        for (int i = 0; i < x.numRows(); ++i)
+            ret.append(x.get(i, 0));
+        ret.append(" ");
+        return ret.toString();
     }
-    
-    
+
+
 }

@@ -11,7 +11,7 @@ import org.ejml.simple.SimpleMatrix;
  */
 public class LambdaGaussians extends Cost {
 
-    private final String PARAM = "lambda";
+    private static final String PARAM = "lambda";
     private double [] lambda;
 
     @Override
@@ -33,7 +33,7 @@ public class LambdaGaussians extends Cost {
 
     @Override
     public String getInfo() {
-        return "Gaussians with sepcified eigenvalues of covariance matrix";
+        return "Gaussians with specified eigenvalues of covariance matrix";
     }
 
     @Override

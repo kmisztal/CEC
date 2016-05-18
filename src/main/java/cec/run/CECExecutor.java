@@ -16,12 +16,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Krzysztof
  */
 public class CECExecutor {
 
-    private static CECExecutor singleton;
+    private static final CECExecutor singleton = new CECExecutor();
     private Data data;
     private List<Pair<ClusterKind, TypeOptions>> clusterTypes;
     private CECAtomic best_result;
@@ -30,9 +29,6 @@ public class CECExecutor {
     }
 
     public static CECExecutor getInstance() {
-        if (CECExecutor.singleton == null) {
-            CECExecutor.singleton = new CECExecutor();
-        }
         return singleton;
     }
 
@@ -55,7 +51,7 @@ public class CECExecutor {
             cect.setData(data);
             cect.setClusterTypes(clusterTypes);
             cect.setOptions(op);
-            
+
             pool.submit(cect);
         }
 

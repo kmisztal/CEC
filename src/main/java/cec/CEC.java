@@ -1,16 +1,17 @@
 package cec;
 
-import cec.run.CECExecutor;
 import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOption;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
 import cec.options.CECConfig;
 import cec.run.CECAtomic;
+import cec.run.CECExecutor;
+import javafx.util.Pair;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import javafx.util.Pair;
 
 /**
  *
@@ -22,7 +23,6 @@ public class CEC {
     private final List<Pair<ClusterKind,TypeOptions>> clusterTypes;
     private String configFile;
     private CECExecutor ecec;
-    private CECConfig op;
 
     /**
      * default constructor
@@ -30,12 +30,12 @@ public class CEC {
     public CEC() {
         this.clusterTypes = new CopyOnWriteArrayList<>();
     }
-    
+
     public CEC(String [] args) {
         this();
     }
 
-    public void setData(String filename, String type) throws IOException {
+    public void setData(String filename, String type) {
         this.data = new Data();
         this.data.read(filename, type);
     }
@@ -60,9 +60,9 @@ public class CEC {
             clusterTypes.add(new Pair<>(clusterKind, typeOption));
     }
 
-    public void run() throws IOException {        
+    public void run() throws IOException {
         ecec = CECExecutor.getInstance();
-        op = CECConfig.getInstance(this.configFile);
+        CECConfig op = CECConfig.getInstance(this.configFile);
         
         //load data
         if(data == null){

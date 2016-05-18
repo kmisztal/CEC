@@ -8,7 +8,7 @@ import org.ejml.simple.SimpleMatrix;
  * @author Krzysztof
  */
 public abstract class Cost {
-    protected boolean needConfiguration = false;
+    protected static final boolean needConfiguration = false;
     protected Cluster cluster;
 
     public Cost() {
@@ -34,7 +34,7 @@ public abstract class Cost {
     
     protected void checkCongiguration(TypeOptions options){
         if(needConfiguration && (options == null || options.isEmpty()))
-            throw new RuntimeException("Please configure your cluster kind with the given options\n - write your implemtnation of this method in your class.");
+            throw new RuntimeException("Please configure your cluster kind with the given options\n - write your implementation of this method in your class.");
     }
     
     /**
