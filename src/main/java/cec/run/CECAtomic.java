@@ -215,6 +215,7 @@ public class CECAtomic {
             System.out.println(c.getMean());
             System.out.println("cov");
             System.out.println(c.getCostFunction().getCov());
+            System.out.println(c.getCov());
         }
     }
 }
