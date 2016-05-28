@@ -31,7 +31,7 @@ public class Comparison4 extends ComparisonWithR {
                     {1.491804, 0.5038512}
             }
     };
-    private ClusterKind clusterKind = ClusterKind.SphericalGaussians;
+    private ClusterKind clusterKind = ClusterKind.Gaussians;
 
     @Override
     public String getFilePath() {
