@@ -61,5 +61,35 @@ public class Data {
         return "Data: size => " + getSize() + "; dimension => " + getDimension();
     }
 
+    public enum DataType {
+        TEXT_TAB("text/tab-separated-values", "Text file with real values separated by a single tab character."),
+        TEXT_SPACE("text/space-separated-values", "Text file with real values separated by a single space character."),
+        IMAGE_PNG("image/png", "A PNG file. Maps pixels to points in a two-dimensional space with point weights proportional to the pixels' shades in grayscale.");
+
+
+        private final String description;
+        private final String identifier;
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public static DataType getByIdentifier(String id) {
+            for (DataType dt : values())
+                if (dt.getIdentifier().equals(id))
+                    return dt;
+            return null;
+        }
+
+        DataType(String identifier, String description) {
+            this.identifier = identifier;
+            this.description = description;
+        }
+    }
+
 
 }

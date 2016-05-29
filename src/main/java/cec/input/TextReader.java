@@ -28,11 +28,12 @@ public class TextReader extends DataReader {
     @Override
     public List<Point> read(String filename, String type) throws IOException {
         String separator;
-        switch (type) {
-            case type1:
+        Data.DataType inputType = Data.DataType.getByIdentifier(type);
+        switch (inputType) {
+            case TEXT_TAB:
                 separator = "\t";
                 break;
-            case type2:
+            case TEXT_SPACE:
                 separator = " ";
                 break;
             default:

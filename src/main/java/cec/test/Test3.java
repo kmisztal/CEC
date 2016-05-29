@@ -25,10 +25,10 @@ public class Test3 {
     public static void main(String[] args) throws IOException {
 
         CEC cec = new CEC();
-        cec.setData("datat/wyk/15p.txt",
+        cec.setData("src/main/resources/datat/wyk/15p.txt",
                 "text/space-separated-values");
 
-//        cec.add(ClusterKind.Gaussians, 1);
+        cec.add(ClusterKind.Gaussians, 1);
         
 //
 //        cec.add(ClusterKind.LambdaGaussians, 3,
@@ -57,12 +57,12 @@ public class Test3 {
         */
         
         //4816.24, 8.19986
-        
-        cec.add(ClusterKind.LambdaGaussians, 7,
-                TypeOption.add("lambda", new double[]{4816.24, 8.19986}));
-        cec.add(ClusterKind.SphericalGaussiansWithFixedRadius, 2,
-                TypeOption.add("r", 254.065)
-        );
+
+//        cec.add(ClusterKind.LambdaGaussians, 7,
+//                TypeOption.add("lambda", new double[]{4816.24, 8.19986}));
+//        cec.add(ClusterKind.SphericalGaussiansWithFixedRadius, 2,
+//                TypeOption.add("r", 254.065)
+//        );
         
         cec.run();
 
