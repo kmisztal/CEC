@@ -1,8 +1,13 @@
+package accuracy;
+
 import cec.CEC;
 import cec.cluster.Cluster;
 import cec.cluster.types.ClusterKind;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.NormOps;
+import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,29 +22,36 @@ import static org.junit.Assert.assertThat;
  * Created by jkordas on 24/05/16.
  */
 public abstract class ComparisonWithR {
-    public final double EPSILON = 0.01;
-    public final int REPEAT = 10;
+    private static final Logger logger = LoggerFactory.getLogger(ComparisonWithR.class);
+    private final double EPSILON = 0.01;
+    private final int REPEAT = 10;
+
+    public final String INPUT_FILES_DIR = "src/main/resources/datat/comparison_with_r/";
+    private CEC cec;
 
     public abstract String getFilePath();
 
     public abstract double[][] getCenters();
+    private double[][] centers;
 
     public abstract double[][][] getCovariances();
+    private double[][][] covariances;
 
     public abstract ClusterKind getClusterKind();
 
-    public void simpleTest() throws IOException {
-        //test input data path
-        String filePath = getFilePath();
+    @Before
+    public void setUp() throws Exception {
         //R output centers
-        double[][] centers = getCenters();
+        centers = getCenters();
         //R output covariances
-        double[][][] covariances = getCovariances();
+        covariances = getCovariances();
 
-        CEC cec = new CEC();
-        cec.setData(filePath, "text/space-separated-values");
+        cec = new CEC();
+        cec.setData(getFilePath(), "text/space-separated-values");
         cec.add(getClusterKind(), REPEAT);
+    }
 
+    public void shouldFailedWhenTheResultsFromTheRAreNotTheSameAsForCEC() throws IOException {
         cec.run();
 //        cec.showResults();
 
@@ -61,7 +73,7 @@ public abstract class ComparisonWithR {
             double expectedNorm = NormOps.normF(covarianceMatrix);
             double diff = Math.abs(norm - expectedNorm);
 
-            System.out.println("Difference : " + diff);
+            logger.info("Difference : {}", diff);
 
             assertThat("Difference", diff, lessThan(EPSILON));
         }

@@ -1,3 +1,5 @@
+package accuracy;
+
 import cec.cluster.types.ClusterKind;
 import org.junit.Test;
 
@@ -6,14 +8,14 @@ import java.io.IOException;
 /**
  * Created by jkordas on 24/05/16.
  */
-public class Comparison2 extends ComparisonWithR {
-    private String filePath = "src/main/resources/datat/comparison_with_r/input2.txt";
-    private double[][] centers = {
+public class R2_Clusters3_SphericalGaussian extends ComparisonWithR {
+    private final String FILE_PATH = INPUT_FILES_DIR + "input2.txt";
+    private final double[][] CENTERS = {
             {-1.83541264, 1.82332016},
             {0.02698894, -0.06156843},
             {1.84047584, 1.84429708}
     };
-    private double[][][] covariances = {
+    private final double[][][] COVARIANCES = {
             {
                     {0.2532616, 0.0462408},
                     {0.0462408, 0.2847791}
@@ -27,30 +29,30 @@ public class Comparison2 extends ComparisonWithR {
                     {-0.04878508, 0.26448490}
             }
     };
-    private ClusterKind clusterKind = ClusterKind.SphericalGaussians;
+    private final ClusterKind CLUSTER_KIND = ClusterKind.SphericalGaussians;
 
     @Override
     public String getFilePath() {
-        return filePath;
+        return FILE_PATH;
     }
 
     @Override
     public double[][] getCenters() {
-        return centers;
+        return CENTERS;
     }
 
     @Override
     public double[][][] getCovariances() {
-        return covariances;
+        return COVARIANCES;
     }
 
     @Override
     public ClusterKind getClusterKind() {
-        return clusterKind;
+        return CLUSTER_KIND;
     }
 
     @Test
-    public void test() throws IOException {
-        simpleTest();
+    public void sphericalGaussianTest() throws IOException {
+        shouldFailedWhenTheResultsFromTheRAreNotTheSameAsForCEC();
     }
 }

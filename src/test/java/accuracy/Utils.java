@@ -1,3 +1,5 @@
+package accuracy;
+
 import cec.cluster.Cluster;
 import org.ejml.simple.SimpleMatrix;
 

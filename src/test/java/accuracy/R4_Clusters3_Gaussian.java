@@ -1,3 +1,5 @@
+package accuracy;
+
 import cec.cluster.types.ClusterKind;
 import org.junit.Test;
 
@@ -6,13 +8,13 @@ import java.io.IOException;
 /**
  * Created by jkordas on 24/05/16.
  */
-public class Comparison6 extends ComparisonWithR {
-    private String filePath = "src/main/resources/datat/comparison_with_r/input6.txt";
-    private double[][] centers = {
+public class R4_Clusters3_Gaussian extends ComparisonWithR {
+    private final String FILE_PATH = INPUT_FILES_DIR + "input6.txt";
+    private final double[][] CENTERS = {
             {5.006000, 3.428000, 1.462000, 0.246000},
             {6.554545, 2.950909, 5.489091, 1.989091},
             {5.904444, 2.775556, 4.193333, 1.293333}};
-    private double[][][] covariances = {
+    private final double[][][] COVARIANCES = {
             {
                     {0.121764, 0.097232, 0.016028, 0.010124},
                     {0.097232, 0.140816, 0.011464, 0.009112},
@@ -32,30 +34,30 @@ public class Comparison6 extends ComparisonWithR {
                     {0.05091852, 0.04228148, 0.05706667, 0.03040000}
             }
     };
-    private ClusterKind clusterKind = ClusterKind.Gaussians;
+    private final ClusterKind CLUSTER_KIND = ClusterKind.Gaussians;
 
     @Override
     public String getFilePath() {
-        return filePath;
+        return FILE_PATH;
     }
 
     @Override
     public double[][] getCenters() {
-        return centers;
+        return CENTERS;
     }
 
     @Override
     public double[][][] getCovariances() {
-        return covariances;
+        return COVARIANCES;
     }
 
     @Override
     public ClusterKind getClusterKind() {
-        return clusterKind;
+        return CLUSTER_KIND;
     }
 
     @Test
-    public void test() throws IOException {
-        simpleTest();
+    public void gaussianTest() throws IOException {
+        shouldFailedWhenTheResultsFromTheRAreNotTheSameAsForCEC();
     }
 }
