@@ -6,8 +6,10 @@ import cec.cluster.types.ClusterKind;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.NormOps;
 import org.junit.Before;
+import org.junit.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.RetryRule;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +29,10 @@ public abstract class ComparisonWithR {
     private final int REPEAT = 10;
 
     public final String INPUT_FILES_DIR = "src/main/resources/datat/comparison_with_r/";
+
+    @Rule
+    public RetryRule retry = new RetryRule(4);
+
     private CEC cec;
 
     public abstract String getFilePath();
