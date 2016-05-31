@@ -34,7 +34,7 @@ public class Point implements ClusterLike, Comparable<Point> {
         this.x = new SimpleMatrix(dimension, 1);
         this.weight = weight;
         synchronized (Point.class) {
-            if (cov == null) {
+            if (cov == null || Point.cov.numRows() != dimension) {
                 Point.cov = new SimpleMatrix(dimension, dimension);
 
                 for (int i = 0; i < dimension; ++i) {
