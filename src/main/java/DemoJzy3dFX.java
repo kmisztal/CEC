@@ -4,37 +4,15 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.javafx.JavaFXChartFactory;
-import org.jzy3d.javafx.JavaFXRenderer3d;
-import org.jzy3d.javafx.controllers.JavaFXCameraMouseController;
-import org.jzy3d.maths.Range;
-import org.jzy3d.plot3d.builder.Builder;
-import org.jzy3d.plot3d.builder.Mapper;
-import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.primitives.Cylinder;
+import org.jzy3d.plot3d.primitives.Ellipsoid;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-/**
- * Showing how to pipe an offscreen Jzy3d chart image to a JavaFX ImageView.
- *
- * {@link JavaFXChartFactory} delivers dedicated  {@link JavaFXCameraMouseController}
- * and {@link JavaFXRenderer3d}
- *
- * Support 
- * Rotation control with left mouse button hold+drag
- * Scaling scene using mouse wheel 
- * Animation (camera rotation with thread) 
- *
- * TODO : 
- * Mouse right click shift
- * Keyboard support (rotate/shift, etc)
- *
- * @author Martin Pernollet
- */
+
 public class DemoJzy3dFX extends Application {
     public static void main(String[] args) {
         Application.launch(args);
@@ -63,34 +41,26 @@ public class DemoJzy3dFX extends Application {
     }
 
     private AWTChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
-        // -------------------------------
-        // Define a function to plot
-        Mapper mapper = new Mapper() {
-            @Override
-            public double f(double x, double y) {
-                return x * Math.sin(x * y);
-            }
-        };
+        final Cylinder cylinder = new Cylinder();
+        Coord3d position = new Coord3d(0, 0, 0);
+        Color color = new Color(0, 0, 255);
+        cylinder.setData(position, 100, 10, 10, 10, color);
 
-        // Define range and precision for the function to plot
-        Range range = new Range(-3, 3);
-        int steps = 80;
+        final Ellipsoid ellipsoid = new Ellipsoid(position, 100, 200, 300);
+        final Ellipsoid ellipsoid1 = new Ellipsoid(position, 300, 200, 100);
+//        ellipsoid.setData(100, 100, 100);
 
-        // Create the object to represent the function over the given range.
-        final Shape surface = Builder.buildOrthonormal(mapper, range, steps);
-        surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
-        surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(false);
-
-        // -------------------------------
-        // Create a chart
         Quality quality = Quality.Advanced;
         //quality.setSmoothPolygon(true);
         //quality.setAnimated(true);
 
-        // let factory bind mouse and keyboard controllers to JavaFX node
         AWTChart chart = (AWTChart) factory.newChart(quality, toolkit);
-        chart.getScene().getGraph().add(surface);
+//        chart.getScene().getGraph().add(surface);
+//        chart.getScene().getGraph().add(cylinder);
+        chart.getScene()
+                .getGraph()
+                .add(ellipsoid);
+        chart.getScene().getGraph().add(ellipsoid1);
         return chart;
     }
 }
