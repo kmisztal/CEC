@@ -36,6 +36,9 @@ public class TextReader extends DataReader {
             case TEXT_SPACE:
                 separator = " ";
                 break;
+            case TEXT_CSV:
+                separator = ",";
+                break;
             default:
                 if (successor != null) {
                     return successor.read(filename, type);
@@ -46,7 +49,7 @@ public class TextReader extends DataReader {
 
         List<Point> data;
 
-        final double weight = 1. / countLines(filename);
+        final double weight;
 
 
         InputStreamReader fileReader = new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8);
@@ -61,6 +64,11 @@ public class TextReader extends DataReader {
             } else {
                 throw new RuntimeException("Empty file " + filename);
             }
+            if (line.matches(".*[a-zA-Z].*")) { //header present
+                line = bufferedReader.readLine();
+                weight = 1. / (countLines(filename) - 1);
+            } else
+                weight = 1. / countLines(filename);
 
             do {
                 final String[] ls = line.split(separator);

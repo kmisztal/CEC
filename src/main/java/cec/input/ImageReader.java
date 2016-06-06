@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -44,7 +45,7 @@ public class ImageReader extends DataReader{
     }
 
     private static List<Point> readPNG(String filename, String type) throws IOException {
-        ArrayList<Point> result = new ArrayList<>();
+        CopyOnWriteArrayList<Point> result = new CopyOnWriteArrayList<>();
 
         String dir = System.getProperty("user.dir");
 

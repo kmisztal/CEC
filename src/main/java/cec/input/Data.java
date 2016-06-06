@@ -64,6 +64,7 @@ public class Data {
     public enum DataType {
         TEXT_TAB("text/tab-separated-values", "Text file with real values separated by a single tab character."),
         TEXT_SPACE("text/space-separated-values", "Text file with real values separated by a single space character."),
+        TEXT_CSV("text/comma-separated-values", "Text file with real values separated by a single comma character. Note that some locales use the comma character as a decimal point while the CSV format separator is a semicolon character. Thic CSV format is currently not supported."),
         IMAGE_PNG("image/png", "A PNG file. Maps pixels to points in a two-dimensional space with point weights proportional to the pixels' shades in grayscale.");
 
 
