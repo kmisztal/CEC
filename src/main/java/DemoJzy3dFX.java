@@ -46,8 +46,10 @@ public class DemoJzy3dFX extends Application {
         Color color = new Color(0, 0, 255);
         cylinder.setData(position, 100, 10, 10, 10, color);
 
-        final Ellipsoid ellipsoid = new Ellipsoid(position, 100, 200, 300);
-        final Ellipsoid ellipsoid1 = new Ellipsoid(position, 300, 200, 100);
+        Coord3d rotationVec = new Coord3d(1, 1, 1);
+        float angle = 45;
+        final Ellipsoid ellipsoid = new Ellipsoid(position, 100, 200, 300, 30, new Coord3d(1, 1, 0));
+        final Ellipsoid ellipsoid1 = new Ellipsoid(position, 300, 200, 100, angle, rotationVec);
 //        ellipsoid.setData(100, 100, 100);
 
         Quality quality = Quality.Advanced;

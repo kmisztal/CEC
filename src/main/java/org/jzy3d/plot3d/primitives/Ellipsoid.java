@@ -15,6 +15,8 @@ public class Ellipsoid extends AbstractWireframeable {
     private float yRadius;
     private float zRadius;
     private Coord3d center;
+    private float angle;
+    private Coord3d rotationVector;
 
     private GLUquadric qobj;
     protected int slices = 15;
@@ -35,6 +37,16 @@ public class Ellipsoid extends AbstractWireframeable {
                 center.x - xRadius, center.x + xRadius,
                 center.y - yRadius, center.y + yRadius,
                 center.z - zRadius, center.z + zRadius);
+
+        this.angle = 0;
+        this.rotationVector = new Coord3d(0, 0, 0);
+    }
+
+    public Ellipsoid(Coord3d center, float xRadius, float yRadius,
+                     float zRadius, float angle, Coord3d rotationVector) {
+        this(center, xRadius, yRadius, zRadius);
+        this.angle = angle;
+        this.rotationVector = rotationVector;
     }
 
     @Override
@@ -45,6 +57,7 @@ public class Ellipsoid extends AbstractWireframeable {
 
         gl2.glTranslatef(center.x,center.y,center.z);
         gl2.glScalef(1.0f, yRadius/xRadius, zRadius/xRadius);
+        gl2.glRotatef(angle, rotationVector.x, rotationVector.y, rotationVector.z);
 
         if(qobj==null)
             qobj = glu.gluNewQuadric();
