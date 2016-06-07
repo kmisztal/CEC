@@ -48,6 +48,8 @@ public class Point implements ClusterLike, Comparable<Point> {
         this(weight, ls.length);
 
         for (int i = 0; i < ls.length; ++i) {
+            if (!ls[i].matches("(\\A[0-9]*)\\.?([0-9]*\\z)"))
+                ls[i] = ls[i].replaceAll("[^0-9\\.]", "");
             this.x.set(i, 0, Double.valueOf(ls[i]));
         }
     }
