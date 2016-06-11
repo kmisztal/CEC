@@ -24,6 +24,8 @@ public class Ellipsoid extends AbstractWireframeable {
 
     protected Color color = Color.GRAY;
 
+    // Zajumać z Ellipse.java
+
     public Ellipsoid(Coord3d center, float xRadius, float yRadius,
                      float zRadius) {
         this.center = center;
@@ -56,11 +58,13 @@ public class Ellipsoid extends AbstractWireframeable {
             transform.execute(gl);
 
         gl2.glTranslatef(center.x,center.y,center.z);
-        gl2.glScalef(1.0f, yRadius/xRadius, zRadius/xRadius);
         gl2.glRotatef(angle, rotationVector.x, rotationVector.y, rotationVector.z);
+        gl2.glScalef(1.0f, yRadius/xRadius, zRadius/xRadius);
 
-        if(qobj==null)
+
+        if(qobj==null) {
             qobj = glu.gluNewQuadric();
+        }
 
         if(facestatus) {
             gl2.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
@@ -68,7 +72,7 @@ public class Ellipsoid extends AbstractWireframeable {
             glu.gluSphere(qobj, xRadius, slices, stacks);
             //glut.glutSolidSphere(radius, slices, stacks);
         }
-        if(wfstatus){
+        if(wfstatus) {
             gl2.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_LINE);
             gl.glLineWidth(wfwidth);
             gl2.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
