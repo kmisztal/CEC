@@ -15,6 +15,8 @@ public class Test2 {
      * @throws java.io.FileNotFoundException
      */
     public static void main(String[] args) throws IOException {
+
+
         CEC cec = new CEC();
         cec.run();
         cec.showResults();

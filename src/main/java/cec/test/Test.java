@@ -20,8 +20,9 @@ public class Test {
     public static void main(String[] args) throws IOException {
 
         CEC cec = new CEC();
-        cec.setData("datat/mouse_fix_r_1/input.txt",
+        cec.setData("src\\main\\resources\\datat\\mouse_fix_r_1\\input.txt",
                 "text/space-separated-values");
+
 
 //        cec.add(ClusterKind.Gaussians, 3);
 //
