@@ -23,7 +23,6 @@ public class CEC {
     private final List<Pair<ClusterKind,TypeOptions>> clusterTypes;
     private String configFile;
     private CECExecutor ecec;
-    private int temp;
 
     /**
      * default constructor
