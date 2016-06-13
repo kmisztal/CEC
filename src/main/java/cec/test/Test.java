@@ -23,7 +23,6 @@ public class Test {
         cec.setData("src\\main\\resources\\datat\\mouse_fix_r_1\\input.txt",
                 "text/space-separated-values");
 
-
 //        cec.add(ClusterKind.Gaussians, 3);
 //
 //        cec.add(ClusterKind.LambdaGaussians, 3,

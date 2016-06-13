@@ -5,6 +5,7 @@ import cec.cluster.ClusterLike;
 import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
+import cec.jBeliar.PdfCECTool;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -216,5 +217,13 @@ public class CECAtomic {
             System.out.println("cov");
             System.out.println(c.getCostFunction().getCov());
         }
+    }
+
+    /**
+     * save the results as PDF file
+     */
+    public void saveResultsAsPDF() {
+
+        PdfCECTool.save(costs, getUsedNumberOfClusters(), numberOfClusters, clusters);
     }
 }
