@@ -71,6 +71,60 @@
             <artifactId>commons-math3</artifactId>
             <version>3.1</version>
         </dependency>
+
+        <!-- sigar API - performance testing -->
+        <dependency>
+            <groupId>org.fusesource</groupId>
+            <artifactId>sigar</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
+        <!-- javaMelody -->
+        <dependency>
+            <groupId>net.bull.javamelody</groupId>
+            <artifactId>javamelody-core</artifactId>
+            <version>1.59.0</version>
+        </dependency>
+
+        <!-- Jetty -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>9.3.6.v20151106</version>
+        </dependency>
+
+
+        <!-- jRobin -->
+        <dependency>
+            <groupId>jrobin</groupId>
+            <artifactId>jrobin</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+        <!-- Koloboke Lib -->
+        <dependency>
+            <groupId>com.koloboke</groupId>
+            <artifactId>koloboke-compile</artifactId>
+            <version>0.5.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.koloboke</groupId>
+            <!-- `jdk6-7` instead of `jdk8` if you use Java 6 or 7 -->
+            <artifactId>koloboke-impl-common-jdk8</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- http://mvnrepository.com/artifact/com.koloboke/koloboke-api-jdk8 -->
+        <dependency>
+            <groupId>com.koloboke</groupId>
+            <artifactId>koloboke-api-jdk8</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
     </dependencies>
+
+
 
 </project>
