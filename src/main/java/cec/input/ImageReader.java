@@ -1,6 +1,7 @@
 package cec.input;
 
 import cec.cluster.Point;
+import cec.input.AdvancedImageAdapter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,9 @@ public class ImageReader extends DataReader{
         switch (inputType) {
             case IMAGE_PNG:
                 return readPNG(filename, type);
+            case IMAGE_TIFF:
+            	AdvancedImageAdapter advancedImageAdapter = new AdvancedImageAdapter(type);
+            	return advancedImageAdapter.read(filename);
             default:
                 if (successor != null) {
                     return successor.read(filename, type);
