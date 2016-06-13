@@ -19,8 +19,8 @@ public class PDFCreator {
 
     public PDFCreator() {
         this.data = new PDFData("Raport");
+        this.config = new PDFConfig("admin", "admin", "title");
         this.style = new PDFStyles(BaseColor.WHITE);
-
     }
     public PDFCreator(PDFData data) {
         this();
@@ -92,6 +92,9 @@ public class PDFCreator {
         //Image image = Image.getInstance(image);
 
         try {
+
+            log("Savinig raport to a file.");
+
             PdfWriter.getInstance(document, new FileOutputStream(this.fileName + ".pdf"));
 
             document.open();
@@ -103,8 +106,13 @@ public class PDFCreator {
             document.add(main);
             document.close();
 
+            log("File is created properly.");
+
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+    private void log(String message) {
+        System.out.println(message);
     }
 }

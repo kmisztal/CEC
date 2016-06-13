@@ -7,6 +7,10 @@ import com.itextpdf.text.BaseColor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Use in CECAtomic class
+ */
+
 public class PdfCECTool {
 
     private PdfCECTool() {}
@@ -27,7 +31,6 @@ public class PdfCECTool {
             if (c.isEmpty()) {
                 continue;
             }
-            //data.addSentence("------------------------------------------------------------------");
 
             data.addLineSeparator();
 
