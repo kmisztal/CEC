@@ -43,6 +43,7 @@ public class Test {
 //                TypeOption.add("r", 0.5)
 //        );
 
+
         cec.run();
 
         //print the results
