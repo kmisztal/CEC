@@ -1,5 +1,6 @@
 package cec.kolobokeCollections;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,6 +51,27 @@ public class Test {
         long c = b-a;
         System.out.println("Time elapsed: ");
         System.out.println((double)c / 1000000000.0);
+
+        OptimizedMap<Integer> zz = OptimizedMap.withExpectedSize(100000);
+        long a2 = System.nanoTime();
+        for (int i = 0; i < 100000; i++) {
+            zz.justPut(i,i);
+        }
+        long b2 = System.nanoTime();
+        long c2 = b2-a2;
+
+        Map<Integer,Integer> zz2 = new HashMap<>();
+        long a3 = System.nanoTime();
+        for (int i = 0; i < 100000; i++) {
+            zz2.put(i,i);
+        }
+        long b3 = System.nanoTime();
+        long c3 = b3-a3;
+
+        System.out.println("Time elapsed for optimized map:");
+        System.out.println((double)c2 / 1000000000.0);
+        System.out.println("Time elapsed for plain map:");
+        System.out.println((double)c3 / 1000000000.0);
 
 
     }
