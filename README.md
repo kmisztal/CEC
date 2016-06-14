@@ -65,6 +65,19 @@ Simple Example
 --------------
 ![alt tag](https://raw.github.com/kmisztal/CEC/master/src/main/resources/img/mouse.png)
 
+Builtin examples
+----------------
+
+There are three built in examples, you can see this library in action just by doing:
+
+```
+mvn package
+java -cp target/CEC-jar-with-dependencies.jar cec.test.Test
+```
+
+Replace `Test` with `Test2` or `Test3` to try other examples.
+
+
 TODO
 ----
 

@@ -1,6 +1,8 @@
 package cec.input;
 
 import cec.cluster.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -8,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- *
  * @author Krzysztof
  */
 public class TextReader extends DataReader {
@@ -16,13 +17,14 @@ public class TextReader extends DataReader {
     private static final String type1 = "text/tab-separated-values";
     private static final String type2 = "text/space-separated-values";
 
-    public TextReader() {
+    private static final Logger logger = LoggerFactory.getLogger(TextReader.class);
 
+    public TextReader() {
     }
 
     @Override
     public boolean type(String type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -52,8 +54,7 @@ public class TextReader extends DataReader {
         final double weight;
 
 
-        InputStreamReader fileReader = new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8);
-
+        InputStreamReader fileReader = getInputStreamReader(filename);
 
         final int dim;
         try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
@@ -86,12 +87,29 @@ public class TextReader extends DataReader {
 
     private int countLines(String filename) throws IOException {
         int cnt;
-        try (LineNumberReader reader = new LineNumberReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8))) {
+        try (LineNumberReader reader = new LineNumberReader(getInputStreamReader(filename))) {
             while (reader.readLine() != null) {
             }
             cnt = reader.getLineNumber();
         }
         return cnt;
+    }
+
+    private InputStreamReader getInputStreamReader(String filename) {
+        InputStreamReader reader = null;
+        try {
+            reader = new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8);
+        } catch (FileNotFoundException e) {
+            logger.warn("File not found in filesystem: ", e.getMessage());
+            logger.warn("Looking through bundled resources.");
+            reader = new InputStreamReader(TextReader.class.getResourceAsStream("/" + filename),
+                    StandardCharsets.UTF_8);
+            if (reader == null) {
+                logger.error("Could not find specified file {} in filesystem nor in bundled resources.", filename);
+                throw new RuntimeException("File not found, see logs.");
+            }
+        }
+        return reader;
     }
 
     private static int getDimension(String line, String separator) {
