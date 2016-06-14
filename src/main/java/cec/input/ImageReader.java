@@ -37,6 +37,7 @@ public class ImageReader extends DataReader{
             case IMAGE_PNG:
                 return readPNG(filename, type);
             case IMAGE_TIFF:
+            case IMAGE_BMP:
             	AdvancedImageAdapter advancedImageAdapter = new AdvancedImageAdapter(type);
             	return advancedImageAdapter.read(filename);
             default:

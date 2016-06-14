@@ -12,8 +12,8 @@ public class AdvancedImageAdapter {
 	public AdvancedImageAdapter(String imageType) {
 		if (imageType == null){
 			throw new UnsupportedOperationException("Not supported yet.");
-		} else if (imageType == "image/tiff"){
-			advancedImageReader = new TIFFReader();
+		} else {
+			advancedImageReader = new AdvancedImageReader();
 		}
 	}
 	

@@ -23,4 +23,10 @@ public class ImageReaderTest extends TestCase {
         List<Point> list = imageReader.read("src/main/resources/data/example.tiff", "image/tiff");
         assertEquals(list.size(), 93902);
     }
+    
+    public void testReadBMP() throws Exception {
+        DataReader imageReader = new ImageReader();
+        List<Point> list = imageReader.read("src/main/resources/data/example.bmp", "image/bmp");
+        assertEquals(list.size(), 381199);
+    }
 }
