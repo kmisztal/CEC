@@ -74,8 +74,15 @@ public class DemoJzy3dFX extends Application {
         }
 
         ArrayList<Scatter> scatters = new ArrayList<>();
+        ArrayList<Color> colors = new ArrayList<Color>() {{
+            add(Color.BLACK);
+            add(Color.RED);
+            add(Color.BLUE);
+        }};
+
         for (ArrayList<Coord3d> points : pointsetMap.values()) {
-            Scatter scatter = new Scatter(points.toArray(new Coord3d[0]), Color.random());
+            Scatter scatter = new Scatter(points.toArray(new Coord3d[0]), colors.get(scatters.size() % colors.size()));
+//            scatter.setWidth(0.02f);
             scatters.add(scatter);
         }
 
