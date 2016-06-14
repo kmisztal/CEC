@@ -20,6 +20,12 @@ public class Test {
     public static void main(String[] args) throws IOException {
 
         CEC cec = new CEC();
+
+        // to pass command line arguments
+        // these arguments overwrite other default/file configuration
+        //CEC cec = new CEC(args);
+
+
         cec.setData("src/main/resources/datat/mouse_fix_r_1/input.txt",
                 "text/space-separated-values");
 

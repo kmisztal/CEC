@@ -24,6 +24,8 @@ public class CEC {
     private String configFile;
     private CECExecutor ecec;
 
+    private String[] args;
+
     /**
      * default constructor
      */
@@ -32,7 +34,8 @@ public class CEC {
     }
 
     public CEC(String [] args) {
-        this();
+        this.args = args;
+        this.clusterTypes = new CopyOnWriteArrayList<>();
     }
 
     public void setData(String filename, String type) {
@@ -62,7 +65,7 @@ public class CEC {
 
     public void run() throws IOException {
         ecec = CECExecutor.getInstance();
-        CECConfig op = CECConfig.getInstance(this.configFile);
+        CECConfig op = CECConfig.getInstance(this.configFile, args);
         
         //load data
         if(data == null){
