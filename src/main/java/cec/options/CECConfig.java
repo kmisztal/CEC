@@ -8,25 +8,27 @@ import nl.chess.it.util.config.ConfigValidationResult;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Krzysztof
  */
 public class CECConfig extends Config {
-    private static CECConfig singleton;
     /**
      * Name of the file we are looking for to read the configuration.
      */
     private static final String RESOURCE_NAME = "cecconfig.properties";
+    private static CECConfig singleton;
     private static Options densities;
 
     /**
      * Creates a new CECConfig object.
      * check if the are same mistakes in file
      *
-     * @param resourceName
-     * @throws java.io.IOException
+     * @param resourceName filename
+     * @throws java.io.IOException exception if file not exists
      */
     private CECConfig(String resourceName, String[] args) throws IOException {
         super(read(resourceName, args));
@@ -85,41 +87,15 @@ public class CECConfig extends Config {
         for (String availableArg : argsMap.keySet())
             optionParser.accepts(availableArg).withRequiredArg();
 
-        OptionSet options = optionParser.parse(args);
+        if (args != null) {
+            OptionSet options = optionParser.parse(args);
 
-        for (Map.Entry<String, String> entry : argsMap.entrySet()) {
-            if (options.has(entry.getKey())){
-                prop.setProperty(entry.getValue(), options.valueOf(entry.getKey()).toString());
+            for (Map.Entry<String, String> entry : argsMap.entrySet()) {
+                if (options.has(entry.getKey())) {
+                    prop.setProperty(entry.getValue(), options.valueOf(entry.getKey()).toString());
+                }
             }
         }
-    }
-
-    public int getGeneralCores() {
-        return getInt("general.cores");
-    }
-
-    public int getNStart() {
-        return getInt("general.nstart");
-    }
-
-    public int getIterations() {
-        return getInt("general.iterations");
-    }
-
-    public String getGeneralOutputDirectory() {
-        return getString("general.output.directory");
-    }
-
-    public String getGeneralOutputFilename() {
-        return getString("general.output.filename");
-    }
-
-    public String getGeneralInputFilename() {
-        return getString("general.input.filename");
-    }
-
-    public String getGeneralInputFileType() {
-        return getString("general.input.type");
     }
 
     public static void main(String[] args) throws IOException {
@@ -152,6 +128,34 @@ public class CECConfig extends Config {
             load();
         }
         return singleton;
+    }
+
+    public int getGeneralCores() {
+        return getInt("general.cores");
+    }
+
+    public int getNStart() {
+        return getInt("general.nstart");
+    }
+
+    public int getIterations() {
+        return getInt("general.iterations");
+    }
+
+    public String getGeneralOutputDirectory() {
+        return getString("general.output.directory");
+    }
+
+    public String getGeneralOutputFilename() {
+        return getString("general.output.filename");
+    }
+
+    public String getGeneralInputFilename() {
+        return getString("general.input.filename");
+    }
+
+    public String getGeneralInputFileType() {
+        return getString("general.input.type");
     }
 
     private void argsOverwrite(String[] args) {

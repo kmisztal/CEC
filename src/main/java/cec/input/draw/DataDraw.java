@@ -48,7 +48,7 @@ public class DataDraw extends JFrame {
         }
 
         data.getClusters().stream().forEach((c) -> {
-            c.getData().stream().forEach((p) -> {
+            c.getData().forEach((p) -> {
                 dt[c.getId()].add(p.getMean().get(0, 0), p.getMean().get(1, 0));
             });
         });

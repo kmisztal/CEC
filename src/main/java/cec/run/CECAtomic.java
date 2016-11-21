@@ -23,7 +23,7 @@ public class CECAtomic {
     private final Data data;
     private final List<Pair<ClusterKind, TypeOptions>> clusterTypes;
     private final int iterations;
-    final int SIZE_MIN;
+    private final int SIZE_MIN;
     /**
      * cost per iteration
      */
@@ -35,7 +35,7 @@ public class CECAtomic {
     private final double[] cost;
     private final int numberOfClusters;
 
-    public CECAtomic(Data data, List<Pair<ClusterKind, TypeOptions>> clusterTypes, int iterations) {
+    CECAtomic(Data data, List<Pair<ClusterKind, TypeOptions>> clusterTypes, int iterations) {
         this.data = data;
         this.clusterTypes = clusterTypes;
         this.iterations = iterations;
@@ -51,16 +51,11 @@ public class CECAtomic {
     }
 
     public double getCost() {
-//        double s = 0;
-//        for (double d : cost) {
-//            s += d;
-//        }
-//        return s;
         return DoubleStream.of(cost).sum();
     }
 
     private void fillClusters() {
-        clusterTypes.stream().forEach((Pair<ClusterKind, TypeOptions> p) -> {
+        clusterTypes.forEach((Pair<ClusterKind, TypeOptions> p) -> {
             if (p.getKey().isOptionNeeded()) {
                 clusters.add(new Cluster(p.getKey().getFunction().setOptions(p.getValue()), data.getDimension()));
             } else {
@@ -97,7 +92,7 @@ public class CECAtomic {
             clusters.get(i).setId(i);
         }
 
-        data.getData().stream().forEach((p) -> clusters.get(rand.nextInt(numberOfClusters)).add(p));
+        data.getData().forEach((p) -> clusters.get(rand.nextInt(numberOfClusters)).add(p));
 
         for (int i = 0; i < numberOfClusters; ++i) {
             cost[i] = clusters.get(i).getCost();
@@ -136,7 +131,7 @@ public class CECAtomic {
 
                 //delete cluster
                 if (!Yj.isEmpty() && Yj.getCardinality() < SIZE_MIN) {
-                    Yj.getData().stream().forEach((p_del) -> clusters.get(getRandomCluster(Yj.getId())).add(p_del));
+                    Yj.getData().forEach((p_del) -> clusters.get(getRandomCluster(Yj.getId())).add(p_del));
 
                     Yj.clear();
 
