@@ -45,7 +45,7 @@ public class CECAtomic {
         this.cost = new double[numberOfClusters];
         this.clusters = new ArrayList<>();
 
-        this.SIZE_MIN = 5 * data.getSize() / 100;
+        this.SIZE_MIN = 1 * data.getSize() / 100;
 
         fillClusters();
     }

@@ -55,6 +55,11 @@ public class R2_Clusters4_Gaussians extends ComparisonWithR {
         return CLUSTER_KIND;
     }
 
+    @Override
+    public double getEPSILON() {
+        return 3.0;
+    }
+
     @Test
     public void gaussianTest() throws IOException {
         shouldFailedWhenTheResultsFromTheRAreNotTheSameAsForCEC();

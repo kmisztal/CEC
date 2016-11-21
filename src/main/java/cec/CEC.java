@@ -19,8 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class CEC {
 
-    private Data data;
     private final List<Pair<ClusterKind,TypeOptions>> clusterTypes;
+    private Data data;
     private String configFile;
     private CECExecutor ecec;
 
@@ -99,6 +99,7 @@ public class CEC {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
-
+    public Data getData() {
+        return data;
+    }
 }

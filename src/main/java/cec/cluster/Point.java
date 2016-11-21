@@ -1,6 +1,7 @@
 package cec.cluster;
 
 import org.ejml.simple.SimpleMatrix;
+import tools.NumberUtils;
 
 /**
  * @author Krzysztof
@@ -43,18 +44,17 @@ public class Point implements ClusterLike, Comparable<Point> {
         }
     }
 
+    //TODO: this method can perform really badly please look out
     public Point(double weight, String[] ls) {
         this(weight, ls.length);
 
         for (int i = 0; i < ls.length; ++i) {
             try {
-                this.x.set(i, 0, Double.parseDouble(ls[i]));
+                this.x.set(i, 0, NumberUtils.createNumber(ls[i]).doubleValue());
             } catch (NumberFormatException ignored) {
-                ls[i] = ls[i].replaceAll("^[0-9\\.+-]", "");
-                this.x.set(i, 0, Double.parseDouble(ls[i]));
+                this.x.set(i, 0, NumberUtils.createNumber(ls[i].trim().replaceAll("[^0-9.+-eE]", "")).doubleValue());
             }
         }
-
     }
 
     @Override
@@ -95,9 +95,14 @@ public class Point implements ClusterLike, Comparable<Point> {
         return t instanceof Point && compareTo((Point) t) == 0;
     }
 
+    @Override
     public int hashCode() {
-        assert false;
-        return 42;
+        int result;
+        long temp;
+        result = x != null ? x.hashCode() : 0;
+        temp = Double.doubleToLongBits(getWeight());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 
     public int getDimension() {
@@ -124,6 +129,4 @@ public class Point implements ClusterLike, Comparable<Point> {
         ret.append(" ");
         return ret.toString();
     }
-
-
 }

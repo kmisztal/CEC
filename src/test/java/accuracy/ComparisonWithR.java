@@ -29,14 +29,14 @@ import static org.junit.Assert.assertThat;
 public abstract class ComparisonWithR {
     private static final Logger logger = LoggerFactory.getLogger(ComparisonWithR.class);
     public final String INPUT_FILES_DIR = "src/main/resources/data_test/comparison_with_r/";
-    private final double EPSILON = 0.01;
-    private final int REPEAT = 10;
+
     @Rule
     public RetryRule retry = new RetryRule(4);
 
     private CEC cec;
     private double[][] centers;
     private double[][][] covariances;
+    private double EPSILON;
 
     private static Map<Integer, Integer> findMapping(List<Cluster> clusters, double[][] centers) {
 
@@ -84,13 +84,14 @@ public abstract class ComparisonWithR {
 
         cec = new CEC();
         cec.setData(getFilePath(), "text/space-separated-values");
-        cec.add(getClusterKind(), REPEAT);
+        cec.add(getClusterKind(), getREPEAT());
     }
 
     public void shouldFailedWhenTheResultsFromTheRAreNotTheSameAsForCEC() throws IOException {
         cec.run();
-//        cec.showResults();
-        new DataDraw(cec.getResult()).disp(getFilePath());
+        cec.showResults();
+        if (cec.getData().getDimension() == 2)
+            new DataDraw(cec.getResult()).disp(getFilePath());
 
         //create list of non empty clusters
         List<Cluster> clusters = cec.getResult().getClusters().stream().filter(c -> !c.isEmpty()).collect(Collectors.toList());
@@ -112,8 +113,16 @@ public abstract class ComparisonWithR {
 
             logger.info("Difference : {}", diff);
 
-            assertThat("Difference", diff, lessThan(EPSILON));
+            assertThat("Difference", diff, lessThan(getEPSILON()));
         }
 
+    }
+
+    public double getEPSILON() {
+        return 0.01;
+    }
+
+    public int getREPEAT() {
+        return 10;
     }
 }
