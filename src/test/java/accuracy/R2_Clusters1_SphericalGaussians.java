@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Created by jkordas on 24/05/16.
  */
-public class R2_Clusters1_Gaussian extends ComparisonWithR {
+public class R2_Clusters1_SphericalGaussians extends ComparisonWithR {
     private final String FILE_PATH = INPUT_FILES_DIR + "input3.txt";
     private final double[][] CENTERS = {
             {-0.006448612, 0.009184474}
@@ -19,7 +19,7 @@ public class R2_Clusters1_Gaussian extends ComparisonWithR {
                     {0.001313875, 0.200261684}
             }
     };
-    private final ClusterKind CLUSTER_KIND = ClusterKind.Gaussians;
+    private final ClusterKind CLUSTER_KIND = ClusterKind.SphericalGaussians;
 
     @Override
     public String getFilePath() {

@@ -37,6 +37,10 @@ public class DataDraw extends JFrame {
     }
 
     public void disp() {
+        disp("");
+    }
+
+    public void disp(String title) {
         if (data.getDimension() != 2) {
             throw new RuntimeException("You can see only 2D data");
         }
@@ -100,7 +104,7 @@ public class DataDraw extends JFrame {
                 insetsRight = 40.0;
         plot.setInsets(new Insets2D.Double(
                 insetsTop, insetsLeft, insetsBottom, insetsRight));
-        plot.getTitle().setText("Nice scatter");
+        plot.getTitle().setText(title);
 
         // Style the plot area
         plot.getPlotArea().setBorderColor(new Color(0.0f, 0.3f, 1.0f));

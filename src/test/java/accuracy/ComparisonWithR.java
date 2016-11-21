@@ -3,6 +3,7 @@ package accuracy;
 import cec.CEC;
 import cec.cluster.Cluster;
 import cec.cluster.types.ClusterKind;
+import cec.input.draw.DataDraw;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.NormOps;
 import org.ejml.simple.SimpleMatrix;
@@ -27,23 +28,50 @@ import static org.junit.Assert.assertThat;
  */
 public abstract class ComparisonWithR {
     private static final Logger logger = LoggerFactory.getLogger(ComparisonWithR.class);
+    public final String INPUT_FILES_DIR = "src/main/resources/data_test/comparison_with_r/";
     private final double EPSILON = 0.01;
     private final int REPEAT = 10;
-
-    public final String INPUT_FILES_DIR = "src/main/resources/datat/comparison_with_r/";
-
     @Rule
     public RetryRule retry = new RetryRule(4);
 
     private CEC cec;
+    private double[][] centers;
+    private double[][][] covariances;
+
+    private static Map<Integer, Integer> findMapping(List<Cluster> clusters, double[][] centers) {
+
+        Map<Integer, Integer> clustersActualToExpectedMapping = new HashMap<>();
+
+        //identify centres
+        int num = 0;
+
+        for (Cluster cluster : clusters) {
+            int mappingNumber = -1;
+            double distance = Double.MAX_VALUE;
+
+            for (int j = 0; j < centers.length; j++) {
+                double[] center = centers[j];
+                SimpleMatrix centerMatrix = new SimpleMatrix(center.length, 1, true, center);
+                SimpleMatrix result = centerMatrix.minus(cluster.getMean());
+                result = result.transpose().mult(result);
+
+                if (result.get(0) < distance) {
+                    distance = result.get(0);
+                    mappingNumber = j;
+                }
+            }
+
+            clustersActualToExpectedMapping.put(num++, mappingNumber);
+        }
+
+        return clustersActualToExpectedMapping;
+    }
 
     public abstract String getFilePath();
 
     public abstract double[][] getCenters();
-    private double[][] centers;
 
     public abstract double[][][] getCovariances();
-    private double[][][] covariances;
 
     public abstract ClusterKind getClusterKind();
 
@@ -62,6 +90,7 @@ public abstract class ComparisonWithR {
     public void shouldFailedWhenTheResultsFromTheRAreNotTheSameAsForCEC() throws IOException {
         cec.run();
 //        cec.showResults();
+        new DataDraw(cec.getResult()).disp(getFilePath());
 
         //create list of non empty clusters
         List<Cluster> clusters = cec.getResult().getClusters().stream().filter(c -> !c.isEmpty()).collect(Collectors.toList());
@@ -86,34 +115,5 @@ public abstract class ComparisonWithR {
             assertThat("Difference", diff, lessThan(EPSILON));
         }
 
-    }
-
-    private static Map<Integer, Integer> findMapping(List<Cluster> clusters, double[][] centers) {
-
-        Map<Integer, Integer> clustersActualToExpectedMapping = new HashMap<>();
-
-        //identify centres
-        int num = 0;
-
-        for (Cluster cluster : clusters) {
-            int mappingNumber = -1;
-            double distance = Double.MAX_VALUE;
-
-            for (int j = 0; j < centers.length; j++) {
-                double[] center = centers[j];
-                SimpleMatrix centerMatrix = new SimpleMatrix(center.length,1,true,center);
-                SimpleMatrix result = centerMatrix.minus(cluster.getMean());
-                result = result.transpose().mult(result);
-
-                if(result.get(0) < distance) {
-                    distance = result.get(0);
-                    mappingNumber = j;
-                }
-            }
-
-            clustersActualToExpectedMapping.put(num++, mappingNumber);
-        }
-
-        return clustersActualToExpectedMapping;
     }
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Created by jkordas on 24/05/16.
  */
-public class R4_Clusters3_Gaussian extends ComparisonWithR {
+public class R4_Clusters3_Gaussians extends ComparisonWithR {
     private final String FILE_PATH = INPUT_FILES_DIR + "input6.txt";
     private final double[][] CENTERS = {
             {5.006000, 3.428000, 1.462000, 0.246000},
