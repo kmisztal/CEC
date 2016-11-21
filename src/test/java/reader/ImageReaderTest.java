@@ -1,9 +1,8 @@
-package cec.test;
+package reader;
 
 import cec.cluster.Point;
 import cec.input.DataReader;
 import cec.input.ImageReader;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import java.util.List;
@@ -14,19 +13,19 @@ import java.util.List;
 public class ImageReaderTest extends TestCase {
     public void testRead() throws Exception {
         DataReader imageReader = new ImageReader();
-        List<Point> list = imageReader.read("src/main/resources/data/plus.png", "image/png");
-        assert list.size() == 56;
+        List<Point> list = imageReader.read("src/main/resources/data_test/png/circles.png", "image/png");
+        assert list.size() == 2036;
     }
 
     public void testReadTIFF() throws Exception {
         DataReader imageReader = new ImageReader();
-        List<Point> list = imageReader.read("src/main/resources/data/example.tiff", "image/tiff");
+        List<Point> list = imageReader.read("src/main/resources/data_test/tiff/example.tiff", "image/tiff");
         assertEquals(list.size(), 93902);
     }
     
     public void testReadBMP() throws Exception {
         DataReader imageReader = new ImageReader();
-        List<Point> list = imageReader.read("src/main/resources/data/example.bmp", "image/bmp");
-        assertEquals(list.size(), 381199);
+        List<Point> list = imageReader.read("src/main/resources/data_test/bmp/example.bmp", "image/bmp");
+        assertEquals(list.size(), 116136);
     }
 }
