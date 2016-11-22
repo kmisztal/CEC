@@ -1,7 +1,9 @@
 package cec.input;
 
+import cec.cluster.ClusterLike;
 import cec.cluster.Point;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,6 +21,13 @@ public class Data {
     public Data() {
         reader = new TextReader();
         reader.setSuccessor(new ImageReader());
+    }
+
+    public Data(List<ClusterLike> data) {
+        this.data = new ArrayList<>();
+        for (ClusterLike cl : data)
+            this.data.add((Point) cl);
+        this.reader = null;
     }
 
     public void read(String filename, String type){

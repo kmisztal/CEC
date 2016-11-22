@@ -31,6 +31,7 @@ public class CEC {
      */
     public CEC() {
         this.clusterTypes = new CopyOnWriteArrayList<>();
+        this.args = new String[0];
     }
 
     public CEC(String [] args) {

@@ -21,19 +21,19 @@ public class CECAtomic {
     private final Random rand = new Random();
 
     private final Data data;
-    private final List<Pair<ClusterKind, TypeOptions>> clusterTypes;
+    private List<Pair<ClusterKind, TypeOptions>> clusterTypes;
     private final int iterations;
     private final int SIZE_MIN;
     /**
      * cost per iteration
      */
     private final List<Double> costs;
-    private final ArrayList<Cluster> clusters;
+    private ArrayList<Cluster> clusters;
     /**
      * cost per cluster
      */
-    private final double[] cost;
-    private final int numberOfClusters;
+    private double[] cost;
+    private int numberOfClusters;
 
     CECAtomic(Data data, List<Pair<ClusterKind, TypeOptions>> clusterTypes, int iterations) {
         this.data = data;
@@ -99,6 +99,67 @@ public class CECAtomic {
         }
     }
 
+    private boolean divide() {
+        ArrayList<Cluster> newClusters = new ArrayList<>();
+        List<Pair<ClusterKind, TypeOptions>> newTypes = new ArrayList<>();
+        boolean divided = false;
+        int empties = 0;
+        for (Cluster cl : clusters) {
+            if (cl.isEmpty()) {
+                ++empties;
+                continue;
+            }
+            if (cl.getCardinality() < 2*SIZE_MIN)
+                continue;
+            double prev_cost = cl.getCost();
+            List<Pair<ClusterKind, TypeOptions>> params = new ArrayList<>();
+            params.add(clusterTypes.get(cl.getId()));
+            params.add(clusterTypes.get(cl.getId()));
+            CECAtomic best_result = null;
+            Data loc = new Data(cl.getData());
+            for (int i = 0; i < 16; ++i) {
+                final CECAtomic result = new CECAtomic(loc, params, 50);
+
+                result.simpleRun();
+
+                if ((best_result == null || best_result.getCost() > result.getCost())
+                        && result.getClusters().get(0).getCardinality() > SIZE_MIN
+                        && result.getClusters().get(1).getCardinality() > SIZE_MIN) {
+                    best_result = result;
+                }
+            }
+            if (best_result != null && 0.001*this.getCost() < (prev_cost-best_result.getCost())) {
+                newClusters.addAll(best_result.getClusters());
+                newTypes.addAll(params);
+                cl.clear();
+                divided = true;
+            }
+        }
+        if (divided) {
+            double[] newCosts = new double[clusters.size()+newClusters.size()-empties];
+            int i;
+            for (i=0;i<newClusters.size();++i) {
+                newCosts[i] = newClusters.get(i).getCost();
+                newClusters.get(i).setId(i);
+            }
+            for (Cluster cl : clusters) {
+                if (!cl.isEmpty()) {
+                    newCosts[i] = cl.getCost();
+                    newClusters.add(cl);
+                    newTypes.add(clusterTypes.get(cl.getId()));
+                    cl.setId(i);
+                    ++i;
+                }
+            }
+            this.clusters = newClusters;
+            this.clusterTypes = newTypes;
+            this.numberOfClusters = newClusters.size();
+            this.cost = newCosts;
+        }
+
+        return divided;
+    }
+
     private boolean iteration() {
         final double cost_ret = getCost();
 
@@ -159,13 +220,23 @@ public class CECAtomic {
         init();
 
         for (int i = 0; i < iterations; ++i) {
-            final boolean t = iteration();
+            boolean t = iteration();
             costs.add(getCost());
+            if (!t && !divide()) {
+                break;
+            }
+        }
+    }
+
+    public void simpleRun() {
+        //initialization
+        init();
+
+        for (int i = 0; i < iterations; ++i) {
+            final boolean t = iteration();
             if (!t) {
                 break;
             }
-            
-            //zmiana na dzielenie co ileś pętli
         }
     }
 
