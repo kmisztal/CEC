@@ -160,6 +160,34 @@ public class CECAtomic {
         return divided;
     }
 
+    private boolean merge() {
+        for (Cluster cl1 : clusters) {
+            if (cl1.isEmpty())
+                continue;
+            for (Cluster cl2 : clusters) {
+                if (cl2.isEmpty() || cl1.getId() == cl2.getId())
+                    continue;
+                if (cl1.getType().getClass() == cl2.getType().getClass() && cl1.getId() > cl2.getId())
+                    continue;
+                Cluster merged = new Cluster(clusterTypes.get(cl2.getId()).getKey().getFunction() , this.getDimension());
+                merged.getCostFunction().setCluster(merged);
+                for (ClusterLike point : cl1.getData()) {
+                    merged.add(point, true);
+                }
+                for (ClusterLike point : cl2.getData()) {
+                    merged.add(point, true);
+                }
+                if (merged.getCost() < cl1.getCost() + cl2.getCost()) {
+                    for (ClusterLike point : cl2.getData())
+                        cl1.add(point, true);
+                    cl2.clear();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean iteration() {
         final double cost_ret = getCost();
 
@@ -222,6 +250,8 @@ public class CECAtomic {
         for (int i = 0; i < iterations; ++i) {
             boolean t = iteration();
             costs.add(getCost());
+            while (merge())
+                t = true;
             if (!t && !divide()) {
                 break;
             }
