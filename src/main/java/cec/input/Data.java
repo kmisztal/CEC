@@ -1,6 +1,7 @@
 package cec.input;
 
 import cec.cluster.Point;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.logging.Logger;
  */
 public class Data {
 
-    private List<Point> data;
     private final DataReader reader;
+    private List<Point> data;
 
     public Data() {
         reader = new TextReader();
@@ -73,12 +74,9 @@ public class Data {
         private final String description;
         private final String identifier;
 
-        public String getDescription() {
-            return description;
-        }
-
-        public String getIdentifier() {
-            return identifier;
+        DataType(String identifier, String description) {
+            this.identifier = identifier;
+            this.description = description;
         }
 
         public static DataType getByIdentifier(String id) {
@@ -88,9 +86,12 @@ public class Data {
             return null;
         }
 
-        DataType(String identifier, String description) {
-            this.identifier = identifier;
-            this.description = description;
+        public String getDescription() {
+            return description;
+        }
+
+        public String getIdentifier() {
+            return identifier;
         }
     }
 

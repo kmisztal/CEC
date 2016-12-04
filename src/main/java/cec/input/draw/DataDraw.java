@@ -1,7 +1,6 @@
 package cec.input.draw;
 
 import cec.cluster.Cluster;
-import cec.run.CECAtomic;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.graphics.Insets2D;
@@ -13,6 +12,7 @@ import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
+import stats.CECResult;
 import tools.ColorGenerator;
 
 import javax.swing.*;
@@ -24,11 +24,12 @@ import java.awt.geom.Ellipse2D;
  * @author Krzysztof
  */
 public class DataDraw extends JFrame {
-    CECAtomic data;
+    CECResult data;
     Color[] colors = {Color.red, Color.green, Color.gray,
             Color.magenta, Color.blue, Color.pink,
             Color.cyan, Color.orange, Color.yellow};
-    public DataDraw(CECAtomic data) {
+
+    public DataDraw(CECResult data) {
         this.data = data;
         if (data.getNumberOfClusters() > colors.length) {
             colors = ColorGenerator.randomColorArray(data.getNumberOfClusters());

@@ -27,7 +27,7 @@ public class CECAtomic {
     /**
      * cost per iteration
      */
-    private final List<Double> costs;
+    private final List<Double> iterationsCosts;
     private final ArrayList<Cluster> clusters;
     /**
      * cost per cluster
@@ -39,7 +39,7 @@ public class CECAtomic {
         this.data = data;
         this.clusterTypes = clusterTypes;
         this.iterations = iterations;
-        this.costs = new ArrayList<>();
+        this.iterationsCosts = new ArrayList<>();
 
         this.numberOfClusters = clusterTypes.size();
         this.cost = new double[numberOfClusters];
@@ -52,6 +52,10 @@ public class CECAtomic {
 
     public double getCost() {
         return DoubleStream.of(cost).sum();
+    }
+
+    public List<Double> getIterationsCosts() {
+        return iterationsCosts;
     }
 
     private void fillClusters() {
@@ -160,7 +164,7 @@ public class CECAtomic {
 
         for (int i = 0; i < iterations; ++i) {
             final boolean t = iteration();
-            costs.add(getCost());
+            iterationsCosts.add(getCost());
             if (!t) {
                 break;
             }
@@ -181,36 +185,8 @@ public class CECAtomic {
      * 
      * @return cluster needed for fully describe data
      */
-    private int getUsedNumberOfClusters() {
-        int ret = 0;
-        ret = clusters.stream().filter((c) -> (!c.isEmpty())).map((_item) -> 1).reduce(ret, Integer::sum);
-        return ret;
+    public int getUsedNumberOfClusters() {
+        return (int) clusters.stream().filter(p -> p.isEmpty()).count();
     }
 
-    /**
-     * prints the results on console
-     */
-    public void showResults() {
-        System.out.println("");
-        System.out.println("BEST RUN INFO");
-        System.out.println("Completed in " + costs.size() + " steps");
-        System.out.println("Cost in each step " + costs.toString());
-        final int v = getUsedNumberOfClusters();
-        System.out.println(v + " needed for clustering (while " + numberOfClusters + " suggested)");
-
-        int no = 0;
-        for (Cluster c : clusters) {
-            if (c.isEmpty()) {
-                continue;
-            }
-            System.out.println("------------------------------------------------------------------");
-            System.out.println("Cluster " + no++ + " " + c.getType());
-            System.out.println(c.getCardinality() + " points");
-            System.out.println("mean");
-            System.out.println(c.getMean());
-            System.out.println("cov");
-            System.out.println(c.getCostFunction().getCov());
-            System.out.println(c.getCov());
-        }
-    }
 }

@@ -38,7 +38,7 @@ public class LambdaGaussians extends Cost {
 
     @Override
     public Cost setOptions(TypeOptions options) {
-        checkCongiguration(options);
+        checkConfiguration(options);
         lambda = (double []) options.get(PARAM);
 //        if(lambda.length != cluster.getDimension())
 //            throw new RuntimeException("The number of given eigenvalues is not correct (" + lambda.length + "!=" + cluster.getDimension());
@@ -60,5 +60,9 @@ public class LambdaGaussians extends Cost {
         return v.mult(l).mult(v.transpose());
     }
 
+    @Override
+    public int numberOfFreeParameters() {
+        return cluster.getDimension();
+    }
 }
 

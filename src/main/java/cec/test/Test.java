@@ -2,8 +2,10 @@ package cec.test;
 
 import cec.CEC;
 import cec.cluster.types.ClusterKind;
-import cec.cluster.types.TypeOption;
 import cec.input.draw.DataDraw;
+import stats.AICScore;
+import stats.BICScore;
+import stats.utils.LogLikelihoodFunction;
 
 import java.io.IOException;
 
@@ -25,11 +27,11 @@ public class Test {
         // these arguments overwrite other default/file configuration
         //CEC cec = new CEC(args);
 
-
-        cec.setData("src/main/resources/datat/mouse_fix_r_1/input.txt",
+        String src = "src/main/resources/datat/mouse_fix_r_1/input.txt";
+        cec.setData(src,
                 "text/space-separated-values");
 
-//        cec.add(ClusterKind.Gaussians, 3);
+        cec.add(ClusterKind.Gaussians, 3);
 //
 //        cec.add(ClusterKind.LambdaGaussians, 3,
 //                TypeOption.add("lambda", new double[]{1., 0.1}));
@@ -37,9 +39,9 @@ public class Test {
 //        cec.add(ClusterKind.CovarianceGaussians, 3,
 //                TypeOption.add("covariance", new double[][]{{1., 0.1}, {0.1, 1}}));
 //
-        cec.add(ClusterKind.DeterminantGaussians, 4,
-                TypeOption.add("det", 0.1)
-        );
+//        cec.add(ClusterKind.DeterminantGaussians, 4,
+//                TypeOption.add("det", 0.1)
+//        );
 //        
 //        cec.add(ClusterKind.DiagonalGaussians, 3);
         
@@ -58,7 +60,15 @@ public class Test {
         //save results to file
         cec.saveResults();
 
-        new DataDraw(cec.getResult()).disp();        
+        new DataDraw(cec.getResult()).disp();
+
+        //        System.out.println(cec.getResult().getPartition());
+        cec.getResult().savePartition(src + ".part");
+
+
+        System.out.println("logMLE = " + LogLikelihoodFunction.loglikelihood(cec.getResult()));
+        System.out.println("AIC = " + new AICScore().score(cec.getResult()));
+        System.out.println("BIC = " + new BICScore().score(cec.getResult()));
     }
 
 }

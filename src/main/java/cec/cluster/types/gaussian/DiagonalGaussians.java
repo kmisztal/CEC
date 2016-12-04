@@ -35,4 +35,9 @@ public class DiagonalGaussians extends Cost {
         return SimpleMatrix.diag(diag);
     }
 
+    @Override
+    public int numberOfFreeParameters() {
+        return cluster.getDimension();
+    }
+
 }

@@ -124,9 +124,10 @@ public class Point implements ClusterLike, Comparable<Point> {
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder("");
-        for (int i = 0; i < x.numRows(); ++i)
+        for (int i = 0; i < x.numRows(); ++i) {
             ret.append(x.get(i, 0));
-        ret.append(" ");
+            ret.append(" ");
+        }
         return ret.toString();
     }
 }

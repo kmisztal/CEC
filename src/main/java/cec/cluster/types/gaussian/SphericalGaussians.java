@@ -33,4 +33,9 @@ public class SphericalGaussians extends Cost {
         return ret;
     }
 
+    @Override
+    public int numberOfFreeParameters() {
+        return 1 + cluster.getDimension();
+    }
+
 }

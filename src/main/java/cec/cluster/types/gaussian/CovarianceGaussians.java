@@ -32,7 +32,7 @@ public class CovarianceGaussians extends Cost {
 
     @Override
     public Cost setOptions(TypeOptions options) {
-        checkCongiguration(options);
+        checkConfiguration(options);
         sigma = new SimpleMatrix((double[][]) options.get(PARAM));
         sigma_inv = sigma.invert();
         sigma_det = 1./sigma_inv.determinant();
@@ -44,4 +44,8 @@ public class CovarianceGaussians extends Cost {
         return sigma;
     }
 
+    @Override
+    public int numberOfFreeParameters() {
+        return cluster.getDimension();
+    }
 }

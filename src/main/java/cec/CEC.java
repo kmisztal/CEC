@@ -5,9 +5,9 @@ import cec.cluster.types.TypeOption;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
 import cec.options.CECConfig;
-import cec.run.CECAtomic;
 import cec.run.CECExecutor;
 import javafx.util.Pair;
+import stats.CECResult;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +23,7 @@ public class CEC {
     private Data data;
     private String configFile;
     private CECExecutor ecec;
+    private CECResult result = null;
 
     private String[] args;
 
@@ -87,8 +88,9 @@ public class CEC {
         this.configFile = filename;
     }
 
-    public CECAtomic getResult(){
-        return ecec.getBestResult();
+    public CECResult getResult() {
+        if (result == null) result = new CECResult(ecec.getBestResult());
+        return result;
     }
     
     public void showResults() {

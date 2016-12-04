@@ -28,7 +28,7 @@ public class DeterminantGaussians extends Cost {
 
     @Override
     public Cost setOptions(TypeOptions options) {
-        checkCongiguration(options);
+        checkConfiguration(options);
         det = (Double) options.get(PARAM);
         return this;
     }
@@ -41,6 +41,11 @@ public class DeterminantGaussians extends Cost {
         } else {
             return cluster.getCov().scale(det / v);
         }
+    }
+
+    @Override
+    public int numberOfFreeParameters() {
+        return cluster.getDimension();
     }
 
 }

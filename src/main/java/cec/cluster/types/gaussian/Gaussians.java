@@ -29,4 +29,9 @@ public class Gaussians extends Cost {
         return cluster.getCov();
     }
 
+    @Override
+    public int numberOfFreeParameters() {
+        return cluster.getDimension() * cluster.getDimension() + cluster.getDimension();
+    }
+
 }
