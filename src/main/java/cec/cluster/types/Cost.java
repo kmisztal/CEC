@@ -51,9 +51,9 @@ public abstract class Cost {
     }
 
     /**
-     * number of free parameters to calculate the model
+     * Model complexity used in BIC and AIC criterion's (number of free parameters to calculate the model)
      *
      * @return
      */
-    public abstract int numberOfFreeParameters();
+    public abstract int getModelComplexity();
 }

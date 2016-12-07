@@ -9,7 +9,7 @@ public class AICScore implements ClusterEvaluation {
     @Override
     public double score(CECResult result) {
         // number of free parameters K
-        final double k = result.numberOfFreeParameters();//1;
+        final double k = result.getModelsComplexity();
         // loglikelihood log(L)
         final double l = LogLikelihoodFunction.loglikelihood(result);
         // AIC score

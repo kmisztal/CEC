@@ -9,7 +9,7 @@ public class BICScore implements ClusterEvaluation {
     @Override
     public double score(CECResult result) {
         // number of free parameters K
-        final double k = 1;
+        final double k = result.getModelsComplexity();
         // sampelsize N
         final double datasize = result.getData().size();
 
@@ -20,6 +20,7 @@ public class BICScore implements ClusterEvaluation {
         return bic;
     }
 
+    @Override
     public boolean compareScore(double score1, double score2) {
         // should be minimzed.
         return score2 > score1;

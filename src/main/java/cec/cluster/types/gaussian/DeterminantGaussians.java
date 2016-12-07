@@ -44,8 +44,9 @@ public class DeterminantGaussians extends Cost {
     }
 
     @Override
-    public int numberOfFreeParameters() {
-        return cluster.getDimension();
+    public int getModelComplexity() {
+        final int n = cluster.getDimension();
+        return n * (n + 1) / 2 - 1 //cov (because determinat fix the cov)
+                + n; //mean
     }
-
 }

@@ -4,19 +4,18 @@ import cec.cluster.types.Cost;
 import org.ejml.simple.SimpleMatrix;
 
 /**
- *
  * @author Krzysztof
  */
 public class Gaussians extends Cost {
 
     @Override
     public double h() {
-        return cluster.getWeight() 
+        return cluster.getWeight()
                 * (
-                    - Math.log(cluster.getWeight())
-                    + cluster.getDimension() * 0.5 * Math.log(2. * Math.PI * Math.E)
-                    + 0.5 * Math.log(cluster.getCov().determinant() * (cluster.getCardinality() - 1.) / cluster.getCardinality())
-                );
+                -Math.log(cluster.getWeight())
+                        + cluster.getDimension() * 0.5 * Math.log(2. * Math.PI * Math.E)
+                        + 0.5 * Math.log(cluster.getCov().determinant() * (cluster.getCardinality() - 1.) / cluster.getCardinality())
+        );
     }
 
     @Override
@@ -30,8 +29,10 @@ public class Gaussians extends Cost {
     }
 
     @Override
-    public int numberOfFreeParameters() {
-        return cluster.getDimension() * cluster.getDimension() + cluster.getDimension();
+    public int getModelComplexity() {
+        final int n = cluster.getDimension();
+        return n * (n + 1) / 2 //cov
+                + n; //mean
     }
 
 }

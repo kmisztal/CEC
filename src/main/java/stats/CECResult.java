@@ -93,12 +93,13 @@ public class CECResult {
         }
     }
 
-    public int numberOfFreeParameters() {
+    public int getModelsComplexity() {
         int res = 0;
         for (Cluster c : result.getClusters()) {
             if (!c.isEmpty())
-                res += c.getType().numberOfFreeParameters();
+                res += c.getType().getModelComplexity();
         }
-        return res;
+        return res //complexity of all clusters (mean and cov)
+                + (result.getUsedNumberOfClusters() - 1); //for storing the weights of each cluster
     }
 }

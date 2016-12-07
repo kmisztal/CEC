@@ -5,7 +5,7 @@ import cec.cluster.types.ClusterKind;
 import cec.input.draw.DataDraw;
 import stats.AICScore;
 import stats.BICScore;
-import stats.utils.LogLikelihoodFunction;
+import stats.LogMLEScore;
 
 import java.io.IOException;
 
@@ -66,7 +66,8 @@ public class Test {
         cec.getResult().savePartition(src + ".part");
 
 
-        System.out.println("logMLE = " + LogLikelihoodFunction.loglikelihood(cec.getResult()));
+//        System.out.println("logMLE = " + LogLikelihoodFunction.loglikelihood(cec.getResult()));
+        System.out.println("logMLE = " + new LogMLEScore().score(cec.getResult()));
         System.out.println("AIC = " + new AICScore().score(cec.getResult()));
         System.out.println("BIC = " + new BICScore().score(cec.getResult()));
     }
