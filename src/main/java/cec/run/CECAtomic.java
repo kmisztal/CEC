@@ -2,6 +2,7 @@ package cec.run;
 
 import cec.cluster.Cluster;
 import cec.cluster.ClusterLike;
+import cec.cluster.Point;
 import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
@@ -45,7 +46,7 @@ public class CECAtomic {
         this.cost = new double[numberOfClusters];
         this.clusters = new ArrayList<>();
 
-        this.SIZE_MIN = 1 * data.getSize() / 100;
+        this.SIZE_MIN = 10;//1 * data.getSize() / 400;
 
         fillClusters();
     }
@@ -96,11 +97,34 @@ public class CECAtomic {
             clusters.get(i).setId(i);
         }
 
-        data.getData().forEach((p) -> clusters.get(rand.nextInt(numberOfClusters)).add(p));
+        //data.getData().forEach((p) -> clusters.get(rand.nextInt(numberOfClusters)).add(p));
+
+        //alternative
+        Point[] centroids = new Point[clusters.size()];
+        for (int i = 0; i < clusters.size(); ++i) {
+            centroids[i] = data.getData().get(rand.nextInt(data.getSize()));
+        }
+        data.getData().forEach((p) -> clusters.get(getNearest(centroids, p)).add(p));
+
+        //end alternative
 
         for (int i = 0; i < numberOfClusters; ++i) {
             cost[i] = clusters.get(i).getCost();
         }
+    }
+
+    private int getNearest(Point[] centroids, Point p) {
+        int min = 0;
+        double dist_min = Double.MAX_VALUE;
+        for (int i = 0; i < centroids.length; ++i) {
+            final double dist = p.dist(centroids[i]);
+            if (dist < dist_min) {
+                min = i;
+                dist_min = dist;
+            }
+
+        }
+        return min;
     }
 
     private boolean iteration() {
@@ -134,7 +158,7 @@ public class CECAtomic {
                 }
 
                 //delete cluster
-                if (!Yj.isEmpty() && Yj.getCardinality() < SIZE_MIN) {
+                if (Yj.isEmpty() || (!Yj.isEmpty() && Yj.getCardinality() < SIZE_MIN)) {
                     Yj.getData().forEach((p_del) -> clusters.get(getRandomCluster(Yj.getId())).add(p_del));
 
                     Yj.clear();

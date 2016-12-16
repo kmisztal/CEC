@@ -27,11 +27,11 @@ public class Test {
         // these arguments overwrite other default/file configuration
         //CEC cec = new CEC(args);
 
-        String src = "src/main/resources/datat/mouse_fix_r_1/input.txt";
+        String src = "src/main/resources/data_test/sets/spirala.txt";
         cec.setData(src,
                 "text/space-separated-values");
 
-        cec.add(ClusterKind.Gaussians, 3);
+        cec.add(ClusterKind.Gaussians, 30);
 //
 //        cec.add(ClusterKind.LambdaGaussians, 3,
 //                TypeOption.add("lambda", new double[]{1., 0.1}));
@@ -66,7 +66,7 @@ public class Test {
         cec.getResult().savePartition(src + ".part");
 
 
-//        System.out.println("logMLE = " + LogLikelihoodFunction.loglikelihood(cec.getResult()));
+        //        System.out.println("logMLE = " + LogLikelihoodFunction.loglikelihood(cec.getResult()));
         System.out.println("logMLE = " + new LogMLEScore().score(cec.getResult()));
         System.out.println("AIC = " + new AICScore().score(cec.getResult()));
         System.out.println("BIC = " + new BICScore().score(cec.getResult()));

@@ -8,8 +8,8 @@ import tools.NumberUtils;
  */
 public class Point implements ClusterLike, Comparable<Point> {
 
-    private static final double epsilon = 0.000000;
-    private final static double delta = 1.;
+    private static final double epsilon = 1.;
+    private final static double delta = 0.01;
     private static SimpleMatrix cov = null;
     private final SimpleMatrix x;
     private final double weight;
@@ -129,5 +129,15 @@ public class Point implements ClusterLike, Comparable<Point> {
             ret.append(" ");
         }
         return ret.toString();
+    }
+
+    public double dist(Point p) {
+        if (this.getDimension() != p.getDimension())
+            throw new RuntimeException("Distance of points from different dimensions");
+        double ret = 0;
+        for (int i = 0; i < getDimension(); ++i) {
+            ret += Math.pow(get(i) - p.get(i), 2.0);
+        }
+        return Math.sqrt(ret);
     }
 }
