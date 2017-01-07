@@ -3,6 +3,8 @@ package cec.cluster;
 import org.ejml.simple.SimpleMatrix;
 import tools.NumberUtils;
 
+import java.util.Random;
+
 /**
  * @author Krzysztof
  */
@@ -13,6 +15,7 @@ public class Point implements ClusterLike, Comparable<Point> {
     private static SimpleMatrix cov = null;
     private final SimpleMatrix x;
     private final double weight;
+    private final static Random RANDOM = new Random(System.currentTimeMillis());
 //    private int partition = -1;
 
     public Point(double weight, double... x) {
@@ -139,5 +142,13 @@ public class Point implements ClusterLike, Comparable<Point> {
             ret += Math.pow(get(i) - p.get(i), 2.0);
         }
         return Math.sqrt(ret);
+    }
+
+    public static Point createRandomPoint(int weight, int dimension, double boundary) {
+        double coordinates[] = new double[dimension];
+        for (int i = 0; i < dimension; ++i) {
+            coordinates[i] = RANDOM.nextDouble()*boundary;
+        }
+        return new Point(weight, coordinates);
     }
 }
