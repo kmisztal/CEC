@@ -10,12 +10,12 @@ import java.util.Random;
  */
 public class Point implements ClusterLike, Comparable<Point> {
 
-    private static final double epsilon = 1.;
+    private static final double epsilon = 0.;
     private final static double delta = 0.01;
+    private final static Random RANDOM = new Random(System.currentTimeMillis());
     private static SimpleMatrix cov = null;
     private final SimpleMatrix x;
     private final double weight;
-    private final static Random RANDOM = new Random(System.currentTimeMillis());
 //    private int partition = -1;
 
     public Point(double weight, double... x) {
@@ -58,6 +58,14 @@ public class Point implements ClusterLike, Comparable<Point> {
                 this.x.set(i, 0, NumberUtils.createNumber(ls[i].trim().replaceAll("[^0-9.+-eE]", "")).doubleValue());
             }
         }
+    }
+
+    public static Point createRandomPoint(int weight, int dimension, double boundary) {
+        double coordinates[] = new double[dimension];
+        for (int i = 0; i < dimension; ++i) {
+            coordinates[i] = RANDOM.nextDouble() * boundary;
+        }
+        return new Point(weight, coordinates);
     }
 
     @Override
@@ -112,10 +120,6 @@ public class Point implements ClusterLike, Comparable<Point> {
         return x.numRows();
     }
 
-    public double get(int i) {
-        return x.get(i, 0);
-    }
-
 //    public int getPartition() {
 //        return partition;
 //    }
@@ -123,6 +127,10 @@ public class Point implements ClusterLike, Comparable<Point> {
 //    public void setPartition(int partition) {
 //        this.partition = partition;
 //    }
+
+    public double get(int i) {
+        return x.get(i, 0);
+    }
 
     @Override
     public String toString() {
@@ -142,13 +150,5 @@ public class Point implements ClusterLike, Comparable<Point> {
             ret += Math.pow(get(i) - p.get(i), 2.0);
         }
         return Math.sqrt(ret);
-    }
-
-    public static Point createRandomPoint(int weight, int dimension, double boundary) {
-        double coordinates[] = new double[dimension];
-        for (int i = 0; i < dimension; ++i) {
-            coordinates[i] = RANDOM.nextDouble()*boundary;
-        }
-        return new Point(weight, coordinates);
     }
 }
