@@ -2,6 +2,7 @@ package tools.kdtree;
 
 import cec.cluster.Point;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class KDTree {
     }
 
     public static KDTree create(List<Point> points) throws WrongDimensionException {
-        return new KDTree(create(points, 0));
+        return new KDTree(create(new ArrayList<Point>(points), 0));
     }
 
     private static Node create(List<Point> points, int depth) throws WrongDimensionException {
@@ -46,8 +47,8 @@ public class KDTree {
         // stąd różnica w wynikach
         // Żeby jeszcze przyspieszyć - zaimplementować medianę-median - liniowo znajduje medianę
         // tutaj n log(n) zajmuje sortowanie
-//        int medianIndex = (points.size() % 2 == 0 ? points.size() / 2 : (points.size() + 1)  / 2);
-        int medianIndex = points.size() / 2;
+        int medianIndex = (points.size() % 2 == 0 ? points.size() / 2 : (points.size() + 1)  / 2);
+//        int medianIndex = points.size() / 2;
         Point median = points.get(medianIndex);
 
         return new Node(median,
@@ -119,6 +120,43 @@ public class KDTree {
         }
 
         return tempNearest;
+    }
+
+    public List<List<Point>> getClusters(int depth) {
+        return getCluster(root, 0, depth);
+    }
+
+    private List<List<Point>> getCluster(Node root, int actualDepth, int maxDepth) {
+        if (actualDepth == maxDepth) {
+            List<List<Point>> result = new ArrayList<List<Point>>();
+            if (root.getLeftTree() != null) {
+                result.add(getPoints(root.getLeftTree()));
+            }
+            if (root.getRightTree() != null) {
+                result.add(getPoints(root.getRightTree()));
+            }
+            return result;
+        }
+        List<List<Point>> result = new ArrayList<List<Point>>();
+        if (root.getLeftTree() != null) {
+            result.addAll(getCluster(root.getLeftTree(), actualDepth + 1, maxDepth));
+        }
+        if (root.getRightTree() != null) {
+            result.addAll(getCluster(root.getRightTree(), actualDepth + 1, maxDepth));
+        }
+        return result;
+    }
+
+    private List<Point> getPoints(Node root) {
+        List<Point> result = new ArrayList<>();
+        result.add(root.getValue());
+        if (root.getLeftTree() != null) {
+            result.addAll(getPoints(root.getLeftTree()));
+        }
+        if (root.getRightTree() != null) {
+            result.addAll(getPoints(root.getRightTree()));
+        }
+        return result;
     }
 
     @Override
