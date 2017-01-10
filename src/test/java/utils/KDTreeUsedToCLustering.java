@@ -5,7 +5,8 @@ import cec.cluster.Point;
 import cec.input.Data;
 import cec.input.draw.Imagek;
 import org.junit.Test;
-import tools.kdtree.KDTree;
+import tools.kdtree.AbstractKDTree;
+import tools.kdtree.SimpleBinaryKDTree;
 import tools.kdtree.WrongDimensionException;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class KDTreeUsedToCLustering {
         String src = "src/main/resources/datat/mouse_1/input.txt";
         cec.setData(src, "text/space-separated-values");
         Data data = cec.getData();
-        KDTree tree = KDTree.create(data.getData());
+        AbstractKDTree tree = new SimpleBinaryKDTree(data.getData());
         List<List<Point>> pointsToDisplay = new ArrayList<>();
         pointsToDisplay.add(data.getData());
         new Imagek(pointsToDisplay).disp();
@@ -39,7 +40,7 @@ public class KDTreeUsedToCLustering {
         String src = "src/main/resources/datat/mouse_fix_r_1/input.txt";
         cec.setData(src, "text/space-separated-values");
         Data data = cec.getData();
-        KDTree tree = KDTree.create(data.getData());
+        AbstractKDTree tree = new SimpleBinaryKDTree(data.getData());
         List<List<Point>> pointsToDisplay = new ArrayList<>();
         pointsToDisplay.add(data.getData());
         new Imagek(pointsToDisplay).disp();
@@ -56,7 +57,7 @@ public class KDTreeUsedToCLustering {
         String src = "src/main/resources/datat/mouse_fix_r_2/input.txt";
         cec.setData(src, "text/space-separated-values");
         Data data = cec.getData();
-        KDTree tree = KDTree.create(data.getData());
+        AbstractKDTree tree = new SimpleBinaryKDTree(data.getData());
         List<List<Point>> pointsToDisplay = new ArrayList<>();
         pointsToDisplay.add(data.getData());
         new Imagek(pointsToDisplay).disp();
@@ -73,7 +74,7 @@ public class KDTreeUsedToCLustering {
         String src = "src/main/resources/datat/mouse_fix_r_3/input.txt";
         cec.setData(src, "text/space-separated-values");
         Data data = cec.getData();
-        KDTree tree = KDTree.create(data.getData());
+        AbstractKDTree tree = new SimpleBinaryKDTree(data.getData());
         List<List<Point>> pointsToDisplay = new ArrayList<>();
         pointsToDisplay.add(data.getData());
         new Imagek(pointsToDisplay).disp();
