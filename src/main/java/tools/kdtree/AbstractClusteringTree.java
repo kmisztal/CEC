@@ -8,6 +8,7 @@ import tools.kdtree.exceptions.WrongDimensionException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by pawel on 10.01.17.
@@ -93,7 +94,7 @@ public abstract class AbstractClusteringTree implements KDTree {
 //        for (List<Point> l : result) {
 //            System.out.println(l.size());
 //        }
-        return result;
+        return result.stream().filter(l->l.size() > 0).collect(Collectors.toList());
     }
 
     private List<List<Point>> getCluster(Node root, int actualDepth, int maxDepth) {

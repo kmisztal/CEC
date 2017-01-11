@@ -71,7 +71,7 @@ public class KDTreeFactory {
 //                System.out.println(cec.getResult().getPartition());
 
                 List<Cluster> clusters = cec.getResult().getClusters().stream()
-                        .filter(c -> c.getMean().determinant() != 0.0 || c.getCov().determinant() != 0.0)
+                        .filter(c -> !c.isEmpty())
                         .sorted((c1,c2) -> Double.compare(c1.getMean().determinant(), c2.getMean().determinant()))
                         .collect(Collectors.toList());
 //                clusters.sort((a,b) -> Double.compare(a.getMean().determinant(), b.getMean().determinant()));
@@ -89,11 +89,11 @@ public class KDTreeFactory {
                     double s1 = clusters.get(i).getCov().determinant();
                     double s2 = clusters.get(i+1).getCov().determinant();
 
-                    double p1 = clusters.get(i).getCost();
-                    double p2 = clusters.get(i+1).getCost();
-                    if (m1 == 0.0 && m2 == 0.0 && s1 == 0.0 && s2 == 0.0) {
-                        continue;
-                    }
+                    double p1 = clusters.get(i).getWeight();
+                    double p2 = clusters.get(i+1).getWeight();
+//                    if (m1 == 0.0 && m2 == 0.0 && s1 == 0.0 && s2 == 0.0) {
+//                        continue;
+//                    }
                     System.out.println("--------------------------------------------");
                     System.out.printf("Klaster %d\n", i);
                     System.out.printf("Lewa średnia: %f\n", m1);
