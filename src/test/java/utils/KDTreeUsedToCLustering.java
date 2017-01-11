@@ -27,7 +27,7 @@ public class KDTreeUsedToCLustering {
         KDTree tree = KDTreeFactory.createCECClusteringKDTree(data.getData());
         List<List<Point>> pointsToDisplay = new ArrayList<>();
         pointsToDisplay.add(data.getData());
-        new Imagek(pointsToDisplay).disp();
+        new Imagek(pointsToDisplay).disp("initial");
 //        new Imagek(tree.getClusters(3)).disp(String.valueOf(3));
 
         for (int i = 1; i < 5; ++i) {

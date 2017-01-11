@@ -55,27 +55,38 @@ public class KDTreeFactory {
                 CEC cec = new CEC();
                 Path path = Paths.get("temp");
                 List<String> lines = new ArrayList<>();
+                int it = 0;
                 for (Point p : points) {
                     String line = String.valueOf(p.get(divisionCoordinate));
 //                    System.out.println(line);
                     lines.add(line);
+                    ++it;
+                }
+
+                //minimal size od cluster
+                if (it < 5) {
+                    return new ArrayList<>();
                 }
                 Files.write(path, lines);
                 cec.setData("temp", "text/space-separated-values");
-                cec.add(ClusterKind.Gaussians, 30);
+                cec.add(ClusterKind.Gaussians, Math.min(30, cec.getData().getSize() / 10) + 1);
                 cec.run();
                 Files.deleteIfExists(path);
 //                System.out.println("=============================================");
 //                System.out.println("Number of clusters: " + cec.getResult().getNumberOfClusters());
 //                System.out.println("Used number of clusters: " + cec.getResult().getUsedNumberOfClusters());
 //                System.out.println(cec.getResult().getPartition());
-
-                List<Cluster> clusters = cec.getResult().getClusters().stream()
-                        .filter(c -> !c.isEmpty())
-                        .sorted((c1,c2) -> Double.compare(c1.getMean().determinant(), c2.getMean().determinant()))
-                        .collect(Collectors.toList());
+                List<Cluster> clusters = null;
+                // jeśli mamy null w resulcie
+                try {
+                    clusters = cec.getResult().getClusters().stream()
+                            .filter(c -> !c.isEmpty())
+                            .sorted((c1, c2) -> Double.compare(c1.getMean().determinant(), c2.getMean().determinant()))
+                            .collect(Collectors.toList());
 //                clusters.sort((a,b) -> Double.compare(a.getMean().determinant(), b.getMean().determinant()));
-
+                } catch (NullPointerException e) {
+                    return new ArrayList<>();
+                }
                 if (clusters.size() <= 1) {
                     return new ArrayList<>();
                 }

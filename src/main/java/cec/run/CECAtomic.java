@@ -46,7 +46,8 @@ public class CECAtomic {
         this.cost = new double[numberOfClusters];
         this.clusters = new ArrayList<>();
 
-        this.SIZE_MIN = 5 * data.getSize() / 100;
+        this.SIZE_MIN = Math.min(Math.max(5 * data.getSize() / 100, 5), this.getData().getSize());
+//        System.err.println(this.SIZE_MIN + " " + this.data.getSize());
 
         fillClusters();
     }
@@ -194,6 +195,18 @@ public class CECAtomic {
             }
             
             //zmiana na dzielenie co ileś pętli
+        }
+    }
+
+    public void simpleRun() {
+        //initialization
+        init();
+
+        for (int i = 0; i < iterations; ++i) {
+            final boolean t = iteration();
+            if (!t) {
+                break;
+            }
         }
     }
 

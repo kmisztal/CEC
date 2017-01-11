@@ -51,11 +51,16 @@ public class CECThread implements CECInterface, Callable<CECAtomic> {
             final CECAtomic result = new CECAtomic(data, clusterTypes, iter);
 
             result.run();
-
-            if (best_result == null || best_result.getCost() > result.getCost()) {
-                best_result = result;
-                System.out.println(getId() + ": " + best_result.getCost() + " ( " + Math.round((1. * i / nstart)*100) + "% )");
+            if (!Double.isInfinite(result.getCost())) {
+                if (best_result == null || (best_result.getCost() > result.getCost())) {
+                    best_result = result;
+                    System.out.println(getId() + ": " + best_result.getCost() + " ( " + Math.round((1. * i / nstart) * 100) + "% )");
+                }
             }
+        }
+        if (best_result == null) {
+            System.err.println("ERROR");
+            System.exit(1);
         }
         return best_result;
     }
