@@ -1,4 +1,4 @@
-package tools.kdtree;
+package tools.kdtree.exceptions;
 
 
 public class TreeNotConstructedYetException extends Exception {

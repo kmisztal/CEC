@@ -8,6 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import tools.kdtree.*;
+import tools.kdtree.exceptions.NoChildFoundException;
+import tools.kdtree.exceptions.TreeNotConstructedYetException;
+import tools.kdtree.exceptions.WrongDimensionException;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,7 +38,7 @@ public class SimpleBinaryKDTreeSetTest {
         CEC cec = new CEC();
         cec.setData(src, "text/space-separated-values");
         Data data = cec.getData();
-        AbstractKDTree tree = new SimpleBinaryKDTree(data.getData());
+        KDTree tree = KDTreeFactory.createSimpleBinaryKDTree(data.getData());
 
         for (int i = 0; i < 10000; ++i) {
             Point p = Point.createRandomPoint(1, 2, 10);

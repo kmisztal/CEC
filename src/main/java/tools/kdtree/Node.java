@@ -1,6 +1,7 @@
 package tools.kdtree;
 
 import cec.cluster.Point;
+import tools.kdtree.exceptions.NoChildFoundException;
 
 import java.util.List;
 
@@ -9,6 +10,10 @@ public class Node {
     private int divisionCoordinate;
     private List<Double> divisionValues;
     private List<Node> children;
+
+    public Node(int divisionCoordinate, List<Double> divisionValues, List<Node> children) {
+        this(null, divisionCoordinate, divisionValues, children);
+    }
 
     public Node(List<Point> values, int divisionCoordinate, List<Double> divisionValues, List<Node> children) {
         this.values = values;
@@ -37,11 +42,11 @@ public class Node {
         if (p.get(divisionCoordinate) < divisionValues.get(0)) {
             return 0;
         }
-        if (p.get(divisionCoordinate) > divisionValues.get(divisionValues.size() - 1)) {
+        if (p.get(divisionCoordinate) >= divisionValues.get(divisionValues.size() - 1)) {
             return children.size() - 1;
         }
         for (int i = 0; i < divisionValues.size() - 1; ++i) {
-            if (p.get(divisionCoordinate) > divisionValues.get(i) && p.get(divisionCoordinate) < divisionValues.get(i+1)) {
+            if (p.get(divisionCoordinate) >= divisionValues.get(i) && p.get(divisionCoordinate) < divisionValues.get(i+1)) {
                 return i+1;
             }
         }
@@ -79,6 +84,6 @@ public class Node {
     }
 
     public String toString() {
-        return this.values.toString();
+        return this.divisionValues.toString();
     }
 }

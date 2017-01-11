@@ -1,6 +1,9 @@
 package tools.kdtree;
 
 import cec.cluster.Point;
+import tools.kdtree.exceptions.NoChildFoundException;
+import tools.kdtree.exceptions.TreeNotConstructedYetException;
+import tools.kdtree.exceptions.WrongDimensionException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,32 +18,22 @@ import java.util.stream.Collectors;
  * http://rosettacode.org/wiki/K-d_tree
  *
  */
-public abstract class AbstractKDTree {
+public abstract class AbstractKDTree implements KDTree {
     protected Node root;
     protected int dimension;
     protected List<Point> points;
 
-    public AbstractKDTree(List<Point> input_points) throws WrongDimensionException {
-        if (input_points.size() == 0) {
-            throw new IllegalArgumentException("Input list is empty");
-        }
-
+    public AbstractKDTree(List<Point> input_points) {
         this.points = new ArrayList<>(input_points);
         this.dimension = points.get(0).getDimension();
         this.root = create(points, 0);
-
-        if (!points.stream().allMatch(p-> p.getDimension() == dimension)) {
-            throw new WrongDimensionException("At least one point has inproper dimension");
-        }
     }
 
     abstract protected int getDivisionCoordinate(List<Point> points, int depth);
 
     abstract protected List<Integer> getDivisionIndecies(List<Point> points, int divisionCoordinate, int depth);
 
-    private Node create(List<Point> points, int depth) throws WrongDimensionException {
-//        System.out.printf("Points: %d, depth: %d\n", points.size(), depth);
-
+    private Node create(List<Point> points, int depth) {
         if (points.size() == 0) {
             return null;
         }
@@ -96,14 +89,6 @@ public abstract class AbstractKDTree {
     }
 
     private Point nn(Node root, Point p) throws NoChildFoundException {
-//        System.out.printf("Szukam (%s), teraz odwiedzam: %s\n", p, root);
-//        List<List<Point>> pointsToDisplay = new ArrayList<>();
-//        pointsToDisplay.add(getPoints(root));
-//        new Imagek(pointsToDisplay).disp();
-
-//        System.out.println("---------------------------------------------");
-//        System.out.printf("Jestem w węźle: %s. Szukam punktu: %s\n", root.toString(), p.toString());
-
         if (root.getChildren() == null || root.getChildren().size() == 0) {
             double tempDist = Double.MAX_VALUE;
             Point tempPoint = null;
@@ -113,20 +98,16 @@ public abstract class AbstractKDTree {
                     tempPoint = point;
                 }
             }
-//            System.out.printf("Doszedłem do liścia: %s\n", tempPoint);
             return tempPoint;
         }
 
         final int coordinate = root.getDivisionCoordinate();
-//        System.out.printf("Dzielę po osi: %d\n", coordinate);
 
         int childIndex = root.getChildIndexFor(p);
         Node childToGo = root.getChildren().get(childIndex);
-//        System.out.printf("Idę do dziecka o indeksie %d\n", childIndex);
 
         Point tempNearestPoint = (childToGo == null ? null : nn(childToGo, p));
         double tempBestDistance = (tempNearestPoint == null ? Double.MAX_VALUE : tempNearestPoint.dist(p));
-//        System.out.printf("Mój wynik po wyjściu z rekursji: %s\n", tempNearestPoint);
 
         Point nearestPointFromRoot = nearestToPointFromList(p, root.getValues());
         double distToNearestPointFromRoot = nearestPointFromRoot.dist(p);
@@ -135,15 +116,12 @@ public abstract class AbstractKDTree {
             tempNearestPoint = nearestPointFromRoot;
             tempBestDistance = distToNearestPointFromRoot;
         }
-//        System.out.printf("Mój wynik po porównaniu z rootem z rekursji: %s\n", tempNearestPoint);
 
         int leftHiperplaneIndex = root.getLeftHiperPlaneIndexFor(p);
         Point leftHiperplane = (leftHiperplaneIndex <= -1 ? null :root.getValues().get(leftHiperplaneIndex));
-//        System.out.printf("Lewa płaszczyzna podziału: %d\n", leftHiperplaneIndex);
 
         int rightHiperplaneIndex = root.getRightHiperPlaneIndexFor(p);
         Point rightHiperplane = (rightHiperplaneIndex >= root.getValues().size() ? null : root.getValues().get(rightHiperplaneIndex));
-//        System.out.printf("Prawa płaszczyzna podziału: %d\n", rightHiperplaneIndex);
 
         double leftRootDistance = (leftHiperplane == null ? Double.MAX_VALUE : leftHiperplane.dist(p));
         double rightRootDistance = (rightHiperplane == null ? Double.MAX_VALUE : rightHiperplane.dist(p));
@@ -163,12 +141,7 @@ public abstract class AbstractKDTree {
             tempNearestPoint = rightHiperplane;
         }
 
-//        System.out.printf("Najlepsza odległość: %f\n", tempBestDistance);
-//        System.out.printf("Odległość do lewej płaszczyzny: %f\n", leftHiperplaneDistance);
-//        System.out.printf("Odległość do prawej płaszczyzny: %f\n", rightHiperplaneDistance);
-
         if (root.getChildren() != null && tempBestDistance > rightHiperplaneDistance && childIndex + 1 < root.getChildren().size() && root.getChildren().get(childIndex + 1) != null) {
-//            System.out.println("Idziemy w prawo");
             Point nearestRightPoint = nn(root.getChildren().get(childIndex + 1), p);
             if (nearestRightPoint.dist(p) < tempBestDistance) {
                 tempBestDistance = nearestRightPoint.dist(p);
@@ -177,7 +150,6 @@ public abstract class AbstractKDTree {
         }
 
         if (root.getChildren() != null && tempBestDistance > leftHiperplaneDistance && childIndex - 1 >= 0 && root.getChildren().get(childIndex - 1) != null) {
-//            System.out.println("Idziemy w lewo");
             Point nearestLeftPoint = nn(root.getChildren().get(childIndex - 1), p);
             if (nearestLeftPoint.dist(p) < tempBestDistance) {
                 tempBestDistance = nearestLeftPoint.dist(p);

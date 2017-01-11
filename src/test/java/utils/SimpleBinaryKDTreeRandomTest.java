@@ -6,6 +6,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import tools.kdtree.*;
+import tools.kdtree.exceptions.NoChildFoundException;
+import tools.kdtree.exceptions.TreeNotConstructedYetException;
+import tools.kdtree.exceptions.WrongDimensionException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +37,7 @@ public class SimpleBinaryKDTreeRandomTest {
         for (int i = 0; i < setSize; ++i) {
             points.add(Point.createRandomPoint(1, 3, 10));
         }
-        AbstractKDTree tree = new SimpleBinaryKDTree(points);
+        KDTree tree = KDTreeFactory.createSimpleBinaryKDTree(points);
 
         for (int i = 0; i < trials; i++) {
 

@@ -1,4 +1,4 @@
-package tools.kdtree;
+package tools.kdtree.exceptions;
 
 /**
  * Created by pawel on 09.01.17.
