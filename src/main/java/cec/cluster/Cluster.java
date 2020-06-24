@@ -76,6 +76,31 @@ public class Cluster implements ClusterLike {
         this.data = new CopyOnWriteArrayList<>();
     }
 
+    public static Cluster add(Cluster A, Cluster B) {//A+B
+        Cluster ret = new Cluster();
+        ret.setWeight(A.getWeight() + B.getWeight());
+        final double pA = A.getWeight() / ret.getWeight();
+        final double pB = B.getWeight() / ret.getWeight();
+
+        ret.setMean(A.getMean().scale(pA).plus(B.getMean().scale(pB)));
+        ret.setCovariance(A.getCov().scale(pA).plus(B.getCov().scale(pB)).plus(A.getMean().minus(B.getMean()).scale(pA * pB).mult(A.getMean().minus(B.getMean()).transpose())));
+
+        ret.setCardinality(A.getCardinality() + B.getCardinality());
+
+        return ret;
+    }
+
+    public static Cluster sub(Cluster A, Cluster B) {//A-B
+        Cluster ret = new Cluster();
+        ret.setWeight(A.getWeight() - B.getWeight());
+        final double pA = A.getWeight() / ret.getWeight();
+        final double pB = B.getWeight() / ret.getWeight();
+        ret.setMean(A.getMean().scale(pA).minus(B.getMean().scale(pB)));
+        ret.setCovariance(A.getCov().scale(pA).minus(B.getCov().scale(pB)).minus(A.getMean().minus(B.getMean()).scale(pA * pB).mult(A.getMean().minus(B.getMean()).transpose())));
+        ret.setCardinality(A.getCardinality() - B.getCardinality());
+        return ret;
+    }
+
     public int getId() {
         return id;
     }
@@ -124,20 +149,6 @@ public class Cluster implements ClusterLike {
         this.weight = weight;
     }
 
-    public static Cluster add(Cluster A, Cluster B) {//A+B
-        Cluster ret = new Cluster();
-        ret.setWeight(A.getWeight() + B.getWeight());
-        final double pA = A.getWeight() / ret.getWeight();
-        final double pB = B.getWeight() / ret.getWeight();
-
-        ret.setMean(A.getMean().scale(pA).plus(B.getMean().scale(pB)));
-        ret.setCovariance(A.getCov().scale(pA).plus(B.getCov().scale(pB)).plus(A.getMean().minus(B.getMean()).scale(pA * pB).mult(A.getMean().minus(B.getMean()).transpose())));
-
-        ret.setCardinality(A.getCardinality() + B.getCardinality());
-
-        return ret;
-    }
-
     /**
      * if add is false we make fake adding
      *
@@ -170,17 +181,6 @@ public class Cluster implements ClusterLike {
     public Cluster addPoint(ClusterLike p) {
         data.add(p);
         return this;
-    }
-
-    public static Cluster sub(Cluster A, Cluster B) {//A-B
-        Cluster ret = new Cluster();
-        ret.setWeight(A.getWeight() - B.getWeight());
-        final double pA = A.getWeight() / ret.getWeight();
-        final double pB = B.getWeight() / ret.getWeight();
-        ret.setMean(A.getMean().scale(pA).minus(B.getMean().scale(pB)));
-        ret.setCovariance(A.getCov().scale(pA).minus(B.getCov().scale(pB)).minus(A.getMean().minus(B.getMean()).scale(pA * pB).mult(A.getMean().minus(B.getMean()).transpose())));
-        ret.setCardinality(A.getCardinality() - B.getCardinality());
-        return ret;
     }
 
     public Cluster sub(ClusterLike B, boolean add) {//A-B
@@ -219,6 +219,16 @@ public class Cluster implements ClusterLike {
 
     public double getCost() {
         return cardinality == 0 ? 0 : costFunction.h();
+    }
+
+    /**
+     * calculates the cost of single point in current cluster
+     *
+     * @param p point for which we make calculations
+     * @return
+     */
+    public double getPointCost(Point p) {
+        return getWeight() * costFunction.getValueAt(getMean(), p);
     }
 
     public List<ClusterLike> getData() {

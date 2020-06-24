@@ -28,12 +28,16 @@ public class TextReader extends DataReader {
     @Override
     public List<Point> read(String filename, String type) throws IOException {
         String separator;
-        switch (type) {
-            case type1:
+        Data.DataType inputType = Data.DataType.getByIdentifier(type);
+        switch (inputType) {
+            case TEXT_TAB:
                 separator = "\t";
                 break;
-            case type2:
+            case TEXT_SPACE:
                 separator = " ";
+                break;
+            case TEXT_CSV:
+                separator = ",";
                 break;
             default:
                 if (successor != null) {
@@ -45,7 +49,7 @@ public class TextReader extends DataReader {
 
         List<Point> data;
 
-        final double weight = 1. / countLines(filename);
+        final double weight;
 
 
         InputStreamReader fileReader = new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8);
@@ -60,6 +64,11 @@ public class TextReader extends DataReader {
             } else {
                 throw new RuntimeException("Empty file " + filename);
             }
+            if (line.matches(".*[a-zA-Z].*")) { //header present
+                line = bufferedReader.readLine();
+                weight = 1. / (countLines(filename) - 1);
+            } else
+                weight = 1. / countLines(filename);
 
             do {
                 final String[] ls = line.split(separator);

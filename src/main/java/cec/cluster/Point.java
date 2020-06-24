@@ -1,17 +1,17 @@
 package cec.cluster;
 
 import org.ejml.simple.SimpleMatrix;
+import tools.NumberUtils;
 
 /**
  * @author Krzysztof
  */
 public class Point implements ClusterLike, Comparable<Point> {
 
-    private static final double epsilon = 0.000000;
-
-    private final SimpleMatrix x;
+    private static final double epsilon = 1.;
+    private final static double delta = 0.01;
     private static SimpleMatrix cov = null;
-    private final static double delta = 1.;
+    private final SimpleMatrix x;
     private final double weight;
 //    private int partition = -1;
 
@@ -34,7 +34,7 @@ public class Point implements ClusterLike, Comparable<Point> {
         this.x = new SimpleMatrix(dimension, 1);
         this.weight = weight;
         synchronized (Point.class) {
-            if (cov == null) {
+            if (cov == null || Point.cov.numRows() != dimension) {
                 Point.cov = new SimpleMatrix(dimension, dimension);
 
                 for (int i = 0; i < dimension; ++i) {
@@ -44,11 +44,16 @@ public class Point implements ClusterLike, Comparable<Point> {
         }
     }
 
+    //TODO: this method can perform really badly please look out
     public Point(double weight, String[] ls) {
         this(weight, ls.length);
 
         for (int i = 0; i < ls.length; ++i) {
-            this.x.set(i, 0, Double.valueOf(ls[i]));
+            try {
+                this.x.set(i, 0, NumberUtils.createNumber(ls[i]).doubleValue());
+            } catch (NumberFormatException ignored) {
+                this.x.set(i, 0, NumberUtils.createNumber(ls[i].trim().replaceAll("[^0-9.+-eE]", "")).doubleValue());
+            }
         }
     }
 
@@ -90,9 +95,14 @@ public class Point implements ClusterLike, Comparable<Point> {
         return t instanceof Point && compareTo((Point) t) == 0;
     }
 
+    @Override
     public int hashCode() {
-        assert false;
-        return 42;
+        int result;
+        long temp;
+        result = x != null ? x.hashCode() : 0;
+        temp = Double.doubleToLongBits(getWeight());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 
     public int getDimension() {
@@ -114,11 +124,20 @@ public class Point implements ClusterLike, Comparable<Point> {
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder("");
-        for (int i = 0; i < x.numRows(); ++i)
+        for (int i = 0; i < x.numRows(); ++i) {
             ret.append(x.get(i, 0));
-        ret.append(" ");
+            ret.append(" ");
+        }
         return ret.toString();
     }
 
-
+    public double dist(Point p) {
+        if (this.getDimension() != p.getDimension())
+            throw new RuntimeException("Distance of points from different dimensions");
+        double ret = 0;
+        for (int i = 0; i < getDimension(); ++i) {
+            ret += Math.pow(get(i) - p.get(i), 2.0);
+        }
+        return Math.sqrt(ret);
+    }
 }

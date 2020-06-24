@@ -5,9 +5,9 @@ import cec.cluster.types.TypeOption;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
 import cec.options.CECConfig;
-import cec.run.CECAtomic;
 import cec.run.CECExecutor;
 import javafx.util.Pair;
+import stats.CECResult;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,10 +19,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class CEC {
 
-    private Data data;
     private final List<Pair<ClusterKind,TypeOptions>> clusterTypes;
+    private Data data;
     private String configFile;
     private CECExecutor ecec;
+    private CECResult result = null;
+
+    private String[] args;
 
     /**
      * default constructor
@@ -32,7 +35,8 @@ public class CEC {
     }
 
     public CEC(String [] args) {
-        this();
+        this.args = args;
+        this.clusterTypes = new CopyOnWriteArrayList<>();
     }
 
     public void setData(String filename, String type) {
@@ -62,7 +66,7 @@ public class CEC {
 
     public void run() throws IOException {
         ecec = CECExecutor.getInstance();
-        CECConfig op = CECConfig.getInstance(this.configFile);
+        CECConfig op = CECConfig.getInstance(this.configFile, args);
         
         //load data
         if(data == null){
@@ -84,8 +88,9 @@ public class CEC {
         this.configFile = filename;
     }
 
-    public CECAtomic getResult(){
-        return ecec.getBestResult();
+    public CECResult getResult() {
+        if (result == null) result = new CECResult(ecec.getBestResult());
+        return result;
     }
     
     public void showResults() {
@@ -96,6 +101,7 @@ public class CEC {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
-
+    public Data getData() {
+        return data;
+    }
 }

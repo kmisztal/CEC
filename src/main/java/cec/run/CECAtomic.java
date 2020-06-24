@@ -2,6 +2,7 @@ package cec.run;
 
 import cec.cluster.Cluster;
 import cec.cluster.ClusterLike;
+import cec.cluster.Point;
 import cec.cluster.types.ClusterKind;
 import cec.cluster.types.TypeOptions;
 import cec.input.Data;
@@ -23,11 +24,11 @@ public class CECAtomic {
     private final Data data;
     private final List<Pair<ClusterKind, TypeOptions>> clusterTypes;
     private final int iterations;
-    final int SIZE_MIN;
+    private final int SIZE_MIN;
     /**
      * cost per iteration
      */
-    private final List<Double> costs;
+    private final List<Double> iterationsCosts;
     private final ArrayList<Cluster> clusters;
     /**
      * cost per cluster
@@ -35,32 +36,31 @@ public class CECAtomic {
     private final double[] cost;
     private final int numberOfClusters;
 
-    public CECAtomic(Data data, List<Pair<ClusterKind, TypeOptions>> clusterTypes, int iterations) {
+    CECAtomic(Data data, List<Pair<ClusterKind, TypeOptions>> clusterTypes, int iterations) {
         this.data = data;
         this.clusterTypes = clusterTypes;
         this.iterations = iterations;
-        this.costs = new ArrayList<>();
+        this.iterationsCosts = new ArrayList<>();
 
         this.numberOfClusters = clusterTypes.size();
         this.cost = new double[numberOfClusters];
         this.clusters = new ArrayList<>();
 
-        this.SIZE_MIN = data.getSize() / 100;
+        this.SIZE_MIN = 10;//1 * data.getSize() / 400;
 
         fillClusters();
     }
 
     public double getCost() {
-//        double s = 0;
-//        for (double d : cost) {
-//            s += d;
-//        }
-//        return s;
         return DoubleStream.of(cost).sum();
     }
 
+    public List<Double> getIterationsCosts() {
+        return iterationsCosts;
+    }
+
     private void fillClusters() {
-        clusterTypes.stream().forEach((Pair<ClusterKind, TypeOptions> p) -> {
+        clusterTypes.forEach((Pair<ClusterKind, TypeOptions> p) -> {
             if (p.getKey().isOptionNeeded()) {
                 clusters.add(new Cluster(p.getKey().getFunction().setOptions(p.getValue()), data.getDimension()));
             } else {
@@ -97,11 +97,34 @@ public class CECAtomic {
             clusters.get(i).setId(i);
         }
 
-        data.getData().stream().forEach((p) -> clusters.get(rand.nextInt(numberOfClusters)).add(p));
+        //data.getData().forEach((p) -> clusters.get(rand.nextInt(numberOfClusters)).add(p));
+
+        //alternative
+        Point[] centroids = new Point[clusters.size()];
+        for (int i = 0; i < clusters.size(); ++i) {
+            centroids[i] = data.getData().get(rand.nextInt(data.getSize()));
+        }
+        data.getData().forEach((p) -> clusters.get(getNearest(centroids, p)).add(p));
+
+        //end alternative
 
         for (int i = 0; i < numberOfClusters; ++i) {
             cost[i] = clusters.get(i).getCost();
         }
+    }
+
+    private int getNearest(Point[] centroids, Point p) {
+        int min = 0;
+        double dist_min = Double.MAX_VALUE;
+        for (int i = 0; i < centroids.length; ++i) {
+            final double dist = p.dist(centroids[i]);
+            if (dist < dist_min) {
+                min = i;
+                dist_min = dist;
+            }
+
+        }
+        return min;
     }
 
     private boolean iteration() {
@@ -135,8 +158,8 @@ public class CECAtomic {
                 }
 
                 //delete cluster
-                if (!Yj.isEmpty() && Yj.getCardinality() < SIZE_MIN) {
-                    Yj.getData().stream().forEach((p_del) -> clusters.get(getRandomCluster(Yj.getId())).add(p_del));
+                if (Yj.isEmpty() || (!Yj.isEmpty() && Yj.getCardinality() < SIZE_MIN)) {
+                    Yj.getData().forEach((p_del) -> clusters.get(getRandomCluster(Yj.getId())).add(p_del));
 
                     Yj.clear();
 
@@ -165,7 +188,7 @@ public class CECAtomic {
 
         for (int i = 0; i < iterations; ++i) {
             final boolean t = iteration();
-            costs.add(getCost());
+            iterationsCosts.add(getCost());
             if (!t) {
                 break;
             }
@@ -186,35 +209,8 @@ public class CECAtomic {
      * 
      * @return cluster needed for fully describe data
      */
-    private int getUsedNumberOfClusters() {
-        int ret = 0;
-        ret = clusters.stream().filter((c) -> (!c.isEmpty())).map((_item) -> 1).reduce(ret, Integer::sum);
-        return ret;
+    public int getUsedNumberOfClusters() {
+        return (int) clusters.stream().filter(p -> p.isEmpty()).count();
     }
 
-    /**
-     * prints the results on console
-     */
-    public void showResults() {
-        System.out.println("");
-        System.out.println("BEST RUN INFO");
-        System.out.println("Completed in " + costs.size() + " steps");
-        System.out.println("Cost in each step " + costs.toString());
-        final int v = getUsedNumberOfClusters();
-        System.out.println(v + " needed for clustering (while " + numberOfClusters + " suggested)");
-
-        int no = 0;
-        for (Cluster c : clusters) {
-            if (c.isEmpty()) {
-                continue;
-            }
-            System.out.println("------------------------------------------------------------------");
-            System.out.println("Cluster " + no++ + " " + c.getType());
-            System.out.println(c.getCardinality() + " points");
-            System.out.println("mean");
-            System.out.println(c.getMean());
-            System.out.println("cov");
-            System.out.println(c.getCostFunction().getCov());
-        }
-    }
 }

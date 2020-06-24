@@ -29,7 +29,7 @@ public class SphericalGaussiansWithFixedRadius extends Cost {
 
     @Override
     public Cost setOptions(TypeOptions options) {
-        checkCongiguration(options);
+        checkConfiguration(options);
         r = (Double) options.get(PARAM);
         return this;
     }
@@ -39,4 +39,9 @@ public class SphericalGaussiansWithFixedRadius extends Cost {
         return SimpleMatrix.identity(this.cluster.getCov().numCols()).scale(r);
     }
 
+    public int getModelComplexity() {
+        final int n = cluster.getDimension();
+        return 1 //cov (we just remember fixed radius)
+                + n; //mean
+    }
 }

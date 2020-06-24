@@ -28,7 +28,7 @@ public class DeterminantGaussians extends Cost {
 
     @Override
     public Cost setOptions(TypeOptions options) {
-        checkCongiguration(options);
+        checkConfiguration(options);
         det = (Double) options.get(PARAM);
         return this;
     }
@@ -43,4 +43,10 @@ public class DeterminantGaussians extends Cost {
         }
     }
 
+    @Override
+    public int getModelComplexity() {
+        final int n = cluster.getDimension();
+        return n * (n + 1) / 2 - 1 //cov (because determinat fix the cov)
+                + n; //mean
+    }
 }

@@ -4,7 +4,6 @@ import cec.cluster.types.Cost;
 import org.ejml.simple.SimpleMatrix;
 
 /**
- *
  * @author Krzysztof
  */
 public class SphericalGaussians extends Cost {
@@ -14,7 +13,7 @@ public class SphericalGaussians extends Cost {
         return cluster.getWeight() * (-Math.log(cluster.getWeight())
                 + cluster.getDimension() * 0.5 * Math.log(2 * Math.PI * Math.E / cluster.getDimension())
                 + 0.5 * cluster.getCov().trace()
-                );
+        );
     }
 
     @Override
@@ -26,11 +25,18 @@ public class SphericalGaussians extends Cost {
     public SimpleMatrix getCov() {
         final SimpleMatrix cov = this.cluster.getCov();
         final int N = cov.numRows();
-        final double v = cov.trace()/N;
+        final double v = cov.trace() / N;
         SimpleMatrix ret = new SimpleMatrix(N, N);
-        for(int i = 0; i < N; ++i)
+        for (int i = 0; i < N; ++i)
             ret.set(i, i, v);
         return ret;
+    }
+
+    @Override
+    public int getModelComplexity() {
+        final int n = cluster.getDimension();
+        return 1 //cov (we just remember radius)
+                + n; //mean
     }
 
 }

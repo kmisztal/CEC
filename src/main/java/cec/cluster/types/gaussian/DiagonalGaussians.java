@@ -35,4 +35,10 @@ public class DiagonalGaussians extends Cost {
         return SimpleMatrix.diag(diag);
     }
 
+    public int getModelComplexity() {
+        final int n = cluster.getDimension();
+        return n //cov (we just remember diagonal)
+                + n; //mean
+    }
+
 }
